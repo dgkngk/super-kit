@@ -6,11 +6,11 @@ allowed-tools: Read, Glob, Grep
 
 # Native Parallel Agents
 
-> Orchestration through Antigravity's built-in Agent Tool
+> Orchestration through native Agent tools
 
 ## Overview
 
-This skill enables coordinating multiple specialized agents through Antigravity's native agent system. Unlike external scripts, this approach keeps all orchestration within Antigravity's control.
+This skill enables coordinating multiple specialized agents through your AI's native sub-agent system. Unlike external scripts, this approach keeps all orchestration within the primary agent's control.
 
 ## When to Use Orchestration
 
@@ -113,7 +113,7 @@ Agents: security-auditor → penetration-tester → synthesis
 
 ---
 
-## Antigravity Built-in Agents
+## Native Built-in Agents
 
 These work alongside custom agents:
 

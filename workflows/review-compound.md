@@ -6,7 +6,7 @@ description: (Compound) Perform comprehensive multi-pass code review with securi
 
 Perform exhaustive code reviews using multi-perspective analysis to catch issues before they ship.
 
-> **Adapted for Antigravity:** Unlike Claude's parallel agent system, this review runs sequentially through each review perspective. Focus on depth over breadth.
+> **Sequential Review:** Unlike parallel agent systems, this review runs sequentially through each review perspective. Focus on depth over breadth.
 >
 > **Note:** This is the Compound version with multi-pass review. For quick review, use `/review`.
 

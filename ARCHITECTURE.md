@@ -94,7 +94,7 @@ The entry point is reading `SUPERKIT.md` to establish global rules.
 
 ### How to Point Changing Agents to the Entrypoint:
 
-- **Antigravity**: Reference `@SUPERKIT.md` in your prompt, or set its content as your persistent user rules for the project.
+- **Standard Agents**: Reference `@SUPERKIT.md` in your prompt, or set its content as your persistent user rules for the project.
 - **Cursor/Windsurf**: Reference `@SUPERKIT.md` in your Composer/Chat, or set the content of `SUPERKIT.md` as your project's `.cursorrules` / `.windsurfrules`.
 - **Cline (VS Code)**: Set the content of `SUPERKIT.md` as your custom instructions in the Cline settings, or add an `@SUPERKIT.md` command in your prompt.
 - **Gemini / Google AI Studio**: Supply `SUPERKIT.md` as your System Prompt instructions.
