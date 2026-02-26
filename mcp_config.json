@@ -1,9 +1,10 @@
 {
     "mcpServers": {
         "superkit": {
-            "command": "node",
+            "command": "npx",
             "args": [
-                "./mcp-server/build/index.js"
+                "-y",
+                "superkit-mcp-server"
             ]
         }
     }

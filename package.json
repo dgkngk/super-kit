@@ -1,6 +1,6 @@
 {
     "name": "superkit-mcp-server",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "module",
     "description": "An MCP server for exploring and loading Super-Kit AI agent resources.",
     "main": "build/index.js",
@@ -19,5 +19,14 @@
     "devDependencies": {
         "@types/node": "^22.10.1",
         "typescript": "^5.7.2"
-    }
+    },
+    "files": [
+        "build/",
+        "agents/",
+        "skills/",
+        "workflows/",
+        "SUPERKIT.md",
+        "README.md",
+        "ARCHITECTURE.md"
+    ]
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Master Checklist Runner - Antigravity Kit
+Master Checklist Runner - Super Kit
 ==========================================
 
 Orchestrates all validation scripts in priority order.
@@ -161,7 +161,7 @@ def print_summary(results: List[dict]):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run Antigravity Kit validation checklist",
+        description="Run Super Kit validation checklist",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -181,7 +181,7 @@ Examples:
         print_error(f"Project path does not exist: {project_path}")
         sys.exit(1)
     
-    print_header("🚀 ANTIGRAVITY KIT - MASTER CHECKLIST")
+    print_header("🚀 SUPER KIT - MASTER CHECKLIST")
     print(f"Project: {project_path}")
     print(f"URL: {args.url if args.url else 'Not provided (performance checks skipped)'}")
     
