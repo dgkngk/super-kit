@@ -4,6 +4,9 @@
     "type": "module",
     "description": "An MCP server for exploring and loading Super-Kit AI agent resources.",
     "main": "build/index.js",
+    "bin": {
+        "superkit-mcp-server": "./build/index.js"
+    },
     "scripts": {
         "build": "tsc",
         "start": "node build/index.js",
