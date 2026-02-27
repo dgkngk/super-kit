@@ -14,9 +14,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
-| `scripts/playwright_runner.py` | Basic browser test | `python scripts/playwright_runner.py https://example.com` |
-| | With screenshot | `python scripts/playwright_runner.py <url> --screenshot` |
-| | Accessibility check | `python scripts/playwright_runner.py <url> --a11y` |
+| `playwright_runner` validator | Basic browser test | `call_tool_checklist` |
+| | With screenshot | `call_tool_checklist` |
+| | Accessibility check | `call_tool_checklist` |
 
 **Requires:** `pip install playwright && playwright install chromium`
 

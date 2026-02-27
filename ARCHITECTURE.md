@@ -22,7 +22,6 @@ super-kit/
 ├── SUPERKIT.md              # Global rules and activation protocol
 ├── .core/                   # Core engine-independent logic
 │   ├── rules/               # Universal mandates (e.g., clean-code, security-first)
-│   └── scripts/             # Master validation (checklist.py, auto_preview.py)
 ├── agents/                  # The T-Shaped AI Team Personas
 ├── skills/                  # The Knowledge Modules
 │   ├── meta/                # Session-resume, compound-docs, file-todos (from gemini-kit)
@@ -84,7 +83,7 @@ The primary operating directive for building sustainable software:
 1. **Explore**: Investigate the codebase and gather requirements.
 2. **Plan**: Write the task boundaries and solution architecture.
 3. **Work**: The Core Team executes code generation.
-4. **Review**: Automated auditing via `.core/scripts/checklist.py`.
+4. **Review**: Automated auditing via `src/tools/checklist.ts`.
 5. **Compound**: Output reusable solutions to `docs/solutions/`.
 
 ## ⚙️ Usage & Agnosticism

@@ -17,7 +17,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
-| `scripts/mobile_audit.py` | Mobile UX & Touch Audit | `python scripts/mobile_audit.py <project_path>` |
+| `mobile_audit` validator | Mobile UX & Touch Audit | `call_tool_checklist` |
 
 ---
 

@@ -26,6 +26,7 @@ npx -y superkit-mcp-server
 - **`load_superkit_agent`**: Loads the system instructions and guidelines for a specific specialist agent (e.g., `data-engineer`).
 - **`load_superkit_skill`**: Loads the skill instructions (`SKILL.md`) for a specific category and skill (e.g., category: `tech`, name: `react-best-practices`).
 - **`load_superkit_workflow`**: Loads the instructions for a specific slash-command workflow (e.g., `work`, `explore`).
+- **`call_tool_checklist`**: Executes the native TypeScript validation suite (security, web accessibility, react performance, testing, API structure) on a target project location via the MCP environment instead of generic bash loops.
 
 ## Manual Installation and Configuration
 

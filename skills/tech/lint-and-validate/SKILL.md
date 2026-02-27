@@ -40,6 +40,6 @@ allowed-tools: Read, Glob, Grep, Bash
 
 | Script | Purpose | Command |
 |--------|---------|---------|
-| `scripts/lint_runner.py` | Unified lint check | `python scripts/lint_runner.py <project_path>` |
-| `scripts/type_coverage.py` | Type coverage analysis | `python scripts/type_coverage.py <project_path>` |
+| `lint_runner` validator | Unified lint check | `call_tool_checklist` |
+| `type_coverage` validator | Type coverage analysis | `call_tool_checklist` |
 
