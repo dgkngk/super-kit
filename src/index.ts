@@ -11,7 +11,10 @@ import * as path from "path";
 import * as fs from "fs/promises";
 import { fileURLToPath } from "url";
 import { z } from "zod";
-
+import { manageAutoPreview } from "./tools/autoPreview.js";
+import { manageSession } from "./tools/sessionManager.js";
+import { runChecklist } from "./tools/checklist.js";
+import { runVerifyAll } from "./tools/verifyAll.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const superKitRoot = path.resolve(__dirname, "../");
@@ -50,6 +53,57 @@ function getSafePath(basePath: string, relativePath: string): string | null {
 }
 
 const TOOLS: Tool[] = [
+    {
+        name: "call_tool_auto_preview",
+        description: "Manages (start/stop/status) the local development server for previewing the application.",
+        inputSchema: {
+            type: "object",
+            properties: {
+                action: { type: "string", enum: ["start", "stop", "status"] },
+                port: { type: "number", default: 3000 }
+            },
+            required: ["action"],
+        }
+    },
+    {
+        name: "call_tool_session_manager",
+        description: "Analyzes project state, detects tech stack, tracks file statistics, and provides a summary.",
+        inputSchema: {
+            type: "object",
+            properties: {
+                command: { type: "string", enum: ["status", "info"] },
+                path: { type: "string", default: "." }
+            },
+            required: ["command"],
+        }
+    },
+    {
+        name: "call_tool_checklist",
+        description: "Orchestrates validation scripts in priority order for incremental validation during development.",
+        inputSchema: {
+            type: "object",
+            properties: {
+                projectPath: { type: "string", default: "." },
+                url: { type: "string" },
+                skipPerformance: { type: "boolean", default: false }
+            },
+            required: ["projectPath"]
+        }
+    },
+    {
+        name: "call_tool_verify_all",
+        description: "Runs COMPLETE validation including all checks + performance + E2E for deployment.",
+        inputSchema: {
+            type: "object",
+            properties: {
+                projectPath: { type: "string", default: "." },
+                url: { type: "string" },
+                skipE2E: { type: "boolean", default: false },
+                stopOnFail: { type: "boolean", default: false }
+            },
+            required: ["projectPath", "url"]
+        }
+    },
     {
         name: "list_superkit_assets",
         description: "Lists all available agents, skills, and workflows in the Super-Kit repository.",
@@ -113,6 +167,26 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
     try {
+        if (request.params.name === "call_tool_auto_preview") {
+            const args = request.params.arguments as any;
+            const res = await manageAutoPreview(args.action, args.port);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_session_manager") {
+            const args = request.params.arguments as any;
+            const res = await manageSession(args.command, args.path);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_checklist") {
+            const args = request.params.arguments as any;
+            const res = await runChecklist(args.projectPath, args.url, args.skipPerformance);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_verify_all") {
+            const args = request.params.arguments as any;
+            const res = await runVerifyAll(args.projectPath, args.url, args.skipE2E, args.stopOnFail);
+            return { content: [{ type: "text", text: res }] };
+        }
         if (request.params.name === "list_superkit_assets") {
             const agentsPath = path.join(superKitRoot, "agents");
             const skillsTechPath = path.join(superKitRoot, "skills", "tech");
