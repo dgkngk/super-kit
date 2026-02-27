@@ -25,7 +25,7 @@ describe('accessibilityChecker', () => {
                  </html>
              `);
             const issues = await checkAccessibility('test.html');
-            expect(issues).toEqual(["Consider adding skip-to-main-content link"]); // Still warns about skip link
+            expect(issues).toEqual([]); // Skip link is only requested if <main> or <body> is present
         });
     });
 });

@@ -26,3 +26,5 @@ npm-debug.log*
 gemini-kit-old/
 gemini-cli-source/
 coverage/
+docs/
+plans/

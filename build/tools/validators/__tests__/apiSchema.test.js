@@ -36,7 +36,7 @@ describe('apiValidator', () => {
         it('should validate openapi json', async () => {
             vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify({
                 openapi: "3.0.0",
-                info: { title: "Test", version: "1" },
+                info: { title: "Test", version: "1", description: "Test API" },
                 paths: {
                     "/test": { get: { responses: { 200: {} }, description: "desc" } }
                 }
@@ -49,7 +49,7 @@ describe('apiValidator', () => {
         it('should detect missing api practices', async () => {
             vi.mocked(fs.readFile).mockResolvedValue(`
                  function handler() {
-                     // no try, no status, no auth
+                     // no try, no status, no security check
                      return "hello";
                  }
              `);
