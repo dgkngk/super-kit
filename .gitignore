@@ -13,6 +13,8 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+.agent/
+.agents/
 
 # Logs
 *.log
@@ -26,5 +28,5 @@ npm-debug.log*
 gemini-kit-old/
 gemini-cli-source/
 coverage/
-docs/
+gits/
 plans/

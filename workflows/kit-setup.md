@@ -26,7 +26,7 @@ Collect information:
 - Goals
 - Key features
 
-**Output:** `.gemini-kit/product.md`
+**Output:** `.docs/product.md`
 
 ### Step 2: Tech Stack
 
@@ -36,7 +36,7 @@ Collect information:
 - Database (PostgreSQL, MongoDB, etc.)
 - Other tools (Redis, S3, etc.)
 
-**Output:** `.gemini-kit/tech-stack.md`
+**Output:** `.docs/tech-stack.md`
 
 ### Step 3: Guidelines
 
@@ -46,14 +46,14 @@ Collect information:
 - Testing requirements
 - Documentation standards
 
-**Output:** `.gemini-kit/guidelines.md`
+**Output:** `.docs/guidelines.md`
 
 ---
 
 ## Generated Files
 
 ```
-.gemini-kit/
+.docs/
 ├── product.md           # Product context
 ├── tech-stack.md        # Technical choices
 └── guidelines.md        # Team conventions
@@ -65,7 +65,7 @@ Collect information:
 
 ### product.md
 ```markdown
-# Product: Gemini-Kit
+# Product: Superkit
 
 ## Description
 Multi-agent AI development toolkit for Gemini CLI.
@@ -93,9 +93,9 @@ After setup complete:
 ✓ Setup complete!
 
 Files created:
-- .gemini-kit/product.md
-- .gemini-kit/tech-stack.md
-- .gemini-kit/guidelines.md
+- .docs/product.md
+- .docs/tech-stack.md
+- .docs/guidelines.md
 
 Next steps:
 1. Review and edit the generated files

@@ -206,7 +206,7 @@ if [ -n "$active_spec" ]; then
 fi
 ```
 
-This is built into `/plan` Step 0.5 and GEMINI.md agent behavior.
+This is built into `/plan` Step 0.5 and main AGENT.md (GEMINI.md, CLAUDE.md) agent behavior.
 
 ---
 

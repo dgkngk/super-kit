@@ -233,10 +233,10 @@ User: "Add mobile support to the web app"
 - If task is unclear, still ask questions first
 - Then route to appropriate agent
 
-### With GEMINI.md Rules
+### With main AGENT.md (GEMINI.md, CLAUDE.md) Rules
 
-- **Priority**: GEMINI.md rules > intelligent-routing
-- If GEMINI.md specifies explicit routing, follow it
+- **Priority**: main AGENT.md (GEMINI.md, CLAUDE.md) rules > intelligent-routing
+- If main AGENT.md (GEMINI.md, CLAUDE.md) specifies explicit routing, follow it
 - Intelligent routing is the DEFAULT when no explicit rule exists
 
 ## Testing the System
@@ -305,7 +305,7 @@ still mention agents explicitly with `@agent-name` if you prefer.
 
 ### Enable Debug Mode (for development)
 
-Add to GEMINI.md temporarily:
+Add to main AGENT.md (GEMINI.md, CLAUDE.md) temporarily:
 
 ```markdown
 ## DEBUG: Intelligent Routing
@@ -332,4 +332,4 @@ Show selection reasoning:
 
 ---
 
-**Next Steps**: Integrate this skill into GEMINI.md TIER 0 rules.
+**Next Steps**: Integrate this skill into main AGENT.md (GEMINI.md, CLAUDE.md) TIER 0 rules.
