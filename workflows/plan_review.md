@@ -110,6 +110,11 @@ cat plans/{plan-name}.md
 - [ ] Data extremes and migration scenarios
 - [ ] User behavior edge cases
 
+**Reproducibility and Transparency (Scientific Review):**
+- [ ] **Data/State Availability:** Are initial states, dummy data, or prerequisites clearly defined?
+- [ ] **Methodological Detail:** Could an independent agent perfectly execute this plan without asking you clarifying questions? 
+- [ ] **Reporting Standards:** Does the plan link to specific codebase conventions (e.g. `CONVENTIONS.md`)?
+
 **Stakeholder Impact (Who else is affected?):**
 - [ ] End users notified of behavior changes?
 - [ ] Breaking changes communicated to other devs?
@@ -125,17 +130,28 @@ cat plans/{plan-name}.md
 
 ### Step 4: Provide Feedback
 
+Maintain a constructive, objective, and professional tone (Scientific Peer Review Standard):
+- **Be constructive:** Frame criticism as opportunities for improvement.
+- **Be specific:** Provide concrete examples and actionable suggestions.
+- **Be balanced:** Acknowledge strengths as well as weaknesses.
+
 ```markdown
 ## Plan Review: {Plan Name}
+
+### Summary Statement
+- {Brief synopsis of the plan and bottom-line assessment of soundness}
 
 ### Strengths
 - {What's good about the plan}
 
-### Concerns
-- {Issues that need addressing}
+### Major Concerns (Critical)
+- {Issues that fundamentally break the plan or block reproducibility}
 
-### Suggestions
+### Minor Suggestions (Improvements)
 - {Improvements to consider}
+
+### Questions for Author
+- {Clarifications needed before execution}
 
 ### Existing Solutions Referenced
 - {Any solutions from docs/solutions/ that apply}

@@ -127,12 +127,13 @@ grep -rn "forEach.*await\|map.*await" --include="*.ts" src/
 
 ---
 
-#### Pass 3: 🏛️ Architecture Review
+#### Pass 3: 🏛️ Architecture & Visual Review
 
-Check structural integrity:
+Check structural integrity and visual communication:
 
 - [ ] **Single Responsibility:** Each function does one thing?
 - [ ] **Dependencies:** Proper layering? No circular deps?
+- [ ] **Schematics:** Are complex workflows visually documented (mermaid/diagrams)?
 - [ ] **Naming:** Clear, consistent naming?
 - [ ] **Patterns:** Following project conventions?
 - [ ] **Tests:** Adequate test coverage?
@@ -158,6 +159,17 @@ Check for unnecessary complexity:
 - [ ] **Dead Code:** Unused imports, functions?
 - [ ] **Over-Engineering:** Simpler solution exists?
 - [ ] **Duplication:** Code that should be extracted?
+
+---
+
+#### Pass 6: 🔬 Algorithmic & State Rigor (Scientific Review)
+
+Apply rigorous scientific evaluation to the core logic:
+
+- [ ] **Circular Logic Check:** Are conclusions/states derived independently?
+- [ ] **Control Variables:** Are side-effects properly controlled/isolated?
+- [ ] **Statistical/Algorithmic Soundness:** Are the algorithms appropriate for the scale? Are edge-cases proven handled?
+- [ ] **Reproducibility:** If this fails in production, is there enough logging to perfectly reproduce the state?
 
 ---
 
@@ -227,31 +239,38 @@ For each P1/P2 finding, create a todo.
 ### Step 8: Generate Review Summary
 
 ```markdown
-## Review Summary: {PR Title}
+## Peer Review Report: {PR Title}
 
 **Reviewed:** {date}
 **Files Changed:** {count}
 **Lines:** +{added} / -{removed}
 
-### Findings
+### Summary Statement
+Provide a concise overall assessment containing:
+- Brief synopsis of the changes
+- Overall recommendation (APPROVE, REQUEST_CHANGES, NEEDS_DISCUSSION)
+- Key strengths
+- Key weaknesses
 
-#### 🔴 P1 - Critical ({count})
-- {Finding 1}
-- {Finding 2}
+### Major Comments (Critical/P1)
+Critical flaws that must be addressed (security, architectural errors, data loss):
+- 1. {Finding 1} - *Suggested fix*
+- 2. {Finding 2} - *Suggested fix*
 
-#### 🟡 P2 - Important ({count})
-- {Finding 1}
+### Minor Comments (P2/P3)
+Important to Nice-to-Have improvements (performance, conventions, dead code):
+- 1. {Finding 1} - *Suggested fix*
+- 2. {Finding 2} - *Suggested fix*
 
-#### 🔵 P3 - Nice to Have ({count})
-- {Finding 1}
-
-### Recommendation
-{APPROVE / REQUEST_CHANGES / NEEDS_DISCUSSION}
+### Questions for Author
+Requests for clarification, unstated assumptions, or missing reproduction steps:
+- 1. Why was {approach} chosen over {alternative}?
+- 2. How are we handling {edge case} in {file}?
 
 ### Next Steps
-- [ ] Address P1 findings
-- [ ] Consider P2 findings
-- [ ] Create follow-up issues for P3
+- [ ] Address Major Comments
+- [ ] Answer Questions
+- [ ] Create follow-up issues for Minor Comments (if deferred)
 ```
 
 ### Step 9: Offer Next Actions

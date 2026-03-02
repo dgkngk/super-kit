@@ -35,3 +35,10 @@ A systematic approach to code review that moves beyond "it looks good" to rigoro
 - **Review in Passes**: Don't check everything at once. Do a security pass, then a performance pass, etc.
 - **Reference Patterns**: Always check against `docs/solutions/patterns/critical-patterns.md`.
 - **Verify, Don't Guess**: If you see a potential issue, verify it with a quick test or script.
+
+## Scientific Review Principles
+Adapted from formal peer review standards to improve code review rigor:
+1. **Algorithmic Soundness Check**: Avoid circular logic where state values mask deeper architectural flaws.
+2. **Control Variables Isolation**: Ensure side-effects are heavily isolated and easily testable (simulating scientific controls).
+3. **Absolute Reproducibility**: If a bug or edge-case is discussed in review, verify that the system has enough telemetry/logging to perfectly reproduce it.
+4. **Constructive Tone Constraint**: Frame criticism objectively as an opportunity for improvement. Avoid dismissing implementations without offering actionable, pattern-compliant alternatives.
