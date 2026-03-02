@@ -291,6 +291,12 @@ Create plan file: `plans/{feature-name}.md`
 - [ ] Criterion 1
 - [ ] Criterion 2
 
+## Acceptance Criteria & Testing (Nyquist Validation Layer)
+> **Important:** Map each requirement to a specific automated test or manual verification command *before* execution.
+- [ ] Criterion 1 -> `npm test -- -t "criterion 1"`
+- [ ] Criterion 2 -> `pytest -k "criterion_2"`
+- [ ] Test scaffolding required: [List tests that need to be created]
+
 ## Technical Considerations
 
 ### Dependencies

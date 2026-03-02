@@ -120,6 +120,8 @@ Before I coordinate the agents, I need to understand your requirements better:
 | `project-planner` | Planning | Task breakdown, milestones, roadmap |
 | `seo-specialist` | SEO & Marketing | SEO optimization, meta tags, analytics |
 | `game-developer` | Game Development | Unity, Godot, Unreal, Phaser, multiplayer |
+| `code-archaeologist` | Legacy/Brownfield | Legacy code discovery, reverse engineering |
+| `qa-automation-engineer` | QA Automation | Playwright, Cypress, CI/CD test automation |
 
 ---
 
@@ -147,6 +149,8 @@ Before I coordinate the agents, I need to understand your requirements better:
 | `explorer-agent` | Codebase discovery | ❌ Write operations |
 | `penetration-tester` | Security testing | ❌ Feature code |
 | `game-developer` | Game logic, scenes, assets | ❌ Web/mobile components |
+| `code-archaeologist` | Legacy code analysis, documentation | ❌ Feature code, DB schema |
+| `qa-automation-engineer` | E2E tests, Playwright, CI/CD | ❌ Application code, backend logic |
 
 ### File Type Ownership
 
