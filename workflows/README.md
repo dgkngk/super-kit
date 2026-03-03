@@ -9,15 +9,16 @@ This directory contains workflow definitions that orchestrate the agent's compou
 
 ## Components
 
-| Category | Workflows | Description |
-|----------|-----------|-------------|
-| Core Loop | 8 | `/explore`, `/specs`, `/plan`, `/plan_review`, `/work`, `/review`, `/compound`, `/housekeeping` |
-| Todo/Triage | 2 | `/triage`, `/resolve_todo` |
-| Code Review | 2 | `/resolve_pr`, `/plan_review` |
-| Release | 3 | `/changelog`, `/release-docs`, `/deploy-docs` |
-| Debugging | 2 | `/report-bug`, `/reproduce-bug` |
-| Skills | 3 | `/create-agent-skill`, `/heal-skill`, `/generate_command` |
-| Maintenance | 2 | `/housekeeping`, `/compound_health` |
+| Category | Workflows |
+|----------|-----------|
+| **Core Loop** | `/explore`, `/specs`, `/plan-compound`, `/plan_review`, `/work`, `/review-compound`, `/compound`, `/housekeeping`, `/cycle` |
+| **Todo / Triage** | `/triage`, `/triage-sprint`, `/resolve_todo` |
+| **Code Review** | `/resolve_pr`, `/plan_review`, `/review-compound` |
+| **Architecture / Context** | `/adr`, `/map-codebase`, `/doc`, `/kit-setup` |
+| **Release** | `/changelog`, `/release-docs`, `/deploy-docs` |
+| **Debugging** | `/report-bug`, `/reproduce-bug` |
+| **Skills & Extensions** | `/create-agent-skill`, `/heal-skill`, `/generate_command`, `/skill-review` |
+| **Maintenance** | `/housekeeping`, `/compound_health`, `/promote_pattern` |
 
 ## Component Details
 
@@ -25,82 +26,93 @@ This directory contains workflow definitions that orchestrate the agent's compou
 
 | Workflow | Purpose | When to Use |
 |----------|---------|-------------|
-| `plan.md` | Create implementation plans | Before significant work |
-| `work.md` | Execute plans systematically | During implementation |
-| `review-compound.md` | Multi-pass code review | After work complete |
-| `compound.md` | Capture knowledge for reuse | After solving problems |
+| `plan-compound.md` | Transform features into structured plans with security & pattern checks | Before significant work |
+| `work.md` | Execute work plans systematically while maintaining quality | During implementation |
+| `review-compound.md` | Multi-pass code review (Security via MCP, Perf, Architecture) | After work complete |
+| `compound.md` | Document reusable knowledge to compound project capability | After solving problems |
 
 ### 🟡 Supporting Workflows
 
 | Workflow | Purpose |
 |----------|---------|
-| `explore.md` | Deep investigation before planning |
-| `specs.md` | Multi-session specifications |
-| `housekeeping.md` | Pre-push cleanup and validation |
-| `triage.md` | Prioritize pending work items |
+| `explore.md` | Deep investigation, best practices, and systematic analysis |
+| `specs.md` | Create and manage specifications for multi-session initiatives |
+| `housekeeping.md` | Pre-push cleanup to archive completed items |
+| `triage.md` | Prioritize findings from code reviews |
 
 ## Core Loop
 
 ```
-/explore (optional) → /specs (large) → /plan (per phase) → /work → /review → /compound → /housekeeping → repeat
+/explore (optional) → /specs (large) → /plan-compound (per phase) → /plan_review → /work → /review-compound → /compound → /housekeeping → repeat
 ```
 
 | Command | When | Purpose |
 |---------|------|---------|
 | `/explore` | Before planning | Deep investigation, best practices, multi-order analysis |
-| `/specs` | Before multi-week initiatives | Create structured specification with phases |
-| `/plan` | Before significant work | Research, design, create implementation plan |
-| `/plan_review` | Before executing plan | Review plan quality and completeness |
-| `/work` | During implementation | Execute plan systematically |
-| `/review` | After work complete | Quality check before merge |
-| `/compound` | After solving problems | Capture knowledge for reuse |
-| `/housekeeping` | Before git push | Archive completed work, fix drift |
+| `/specs` | Major initiatives | Create structured specification with phases |
+| `/plan-compound` | Before sig. work | Transform descriptions into well-structured project plans |
+| `/plan_review` | Pre-execution | Review implementation plans for quality and completeness |
+| `/work` | Implementation | Execute work plans systematically while maintaining quality |
+| `/review-compound`| Post-work | Perform comprehensive multi-pass code review with MCP security |
+| `/compound` | Post-solution | Document reusable knowledge to compound project capability |
+| `/cycle` | Small tasks | Orchestrate full "plan → review → work → review → compound" lifecycle |
+| `/housekeeping` | Pre-push | Archive completed work, validate repo health |
 
 ## Support Commands
 
 ### Todos & Triage
 | Command | Purpose |
 |---------|---------|
-| `/triage` | Prioritize pending todo items |
-| `/resolve_todo` | Batch-process ready todos |
+| `/triage` | Triage and prioritize findings from code reviews |
+| `/triage-sprint` | Batch process pending todos to unblock triage bottlenecks |
+| `/resolve_todo` | Resolve multiple todo items efficiently |
 
-### Code Review
+### Code Review & Quality
 | Command | Purpose |
 |---------|---------|
-| `/resolve_pr` | Address PR feedback systematically |
-| `/plan_review` | Review plan quality before execution |
+| `/resolve_pr` | Handle PR comments and review feedback efficiently |
+| `/plan_review` | Review implementation plans for quality |
+| `/review-compound` | Perform multi-pass code review with security, performance, & architecture checks |
+
+### Architecture & Context
+| Command | Purpose |
+|---------|---------|
+| `/adr` | Create a new Architecture Decision Record |
+| `/map-codebase` | Map existing codebase architecture, tech stack, and conventions |
+| `/doc` | Update folder-level documentation and component changelogs |
+| `/kit-setup` | Interactive project setup wizard creating context files |
 
 ### Release & Docs
 | Command | Purpose |
 |---------|---------|
-| `/changelog` | Generate changelog from commits |
+| `/changelog` | Generate changelog entries from commits |
 | `/release-docs` | Prepare release documentation |
 | `/deploy-docs` | Deploy documentation updates |
 
 ### Debugging
 | Command | Purpose |
 |---------|---------|
-| `/report-bug` | Create structured bug report |
-| `/reproduce-bug` | Systematically reproduce a bug |
+| `/report-bug` | Report bugs with structured reproduction steps |
+| `/reproduce-bug` | Reproduce reported bugs systematically |
 
 ### Skills & Extensions
 | Command | Purpose |
 |---------|---------|
-| `/create-agent-skill` | Add new modular capabilities |
+| `/create-agent-skill` | Create new skills for extending agent capabilities |
 | `/heal-skill` | Diagnose and fix broken skills |
-| `/generate_command` | Create new workflow commands |
+| `/generate_command` | Create new workflow commands dynamically |
+| `/skill-review` | Weekly review of potential new agent skills discovered from usage |
+
+### Maintenance & Health
+| Command | Purpose |
+|---------|---------|
+| `/compound_health` | Check the improved Compound System's health and usage metrics |
+| `/promote_pattern` | Promote a recurring issue to a critical pattern |
 
 ### Platform-Specific
 | Command | Purpose |
 |---------|---------|
-| `/xcode-test` | Run Xcode tests for iOS |
-
-### Maintenance
-| Command | Purpose |
-|---------|---------|
-| `/housekeeping` | Pre-push cleanup: archive completed work, fix state drift |
-| `/compound_health` | Weekly health check: monitor knowledge base vitals |
-| `check-docs-freshness` | Verify documentation updates for code changes |
+| `/xcode-test` | Run Xcode tests for iOS applications |
 
 ### Modular Skills
 | Skill | Purpose | Entry Point |

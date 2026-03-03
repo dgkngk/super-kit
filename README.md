@@ -32,6 +32,10 @@ npx -y superkit-mcp-server
 - **`load_superkit_workflow`**: Loads the instructions for a specific slash-command workflow (e.g., `work`, `explore`).
 - **`call_tool_checklist`**: Executes the native TypeScript validation suite (security, web accessibility, react performance, testing, API structure) on a target project location via the MCP environment instead of generic bash loops.
 
+## Available Prompts
+
+The Super-Kit MCP server exposes all workflows inside the `workflows/` directory dynamically as **MCP Prompts**. AI agents can invoke `GetPromptRequestSchema` to instantly load complex workflows (e.g., `plan-compound`, `review-compound`) along with their security and validation tooling straight into their context.
+
 ## Manual Installation and Configuration
 
 If you cloned this repository locally, you can build and use the MCP server directly:
