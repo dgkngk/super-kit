@@ -5,7 +5,8 @@ Super-Kit is a modular repository containing instructions, workflows, skills, an
 While the primary purpose is to compund the knowledge of engineering, I will add more domains as I see fit.
 
 🔗 **GitHub Repository:** [dgkngk/super-kit](https://github.com/dgkngk/super-kit)
-🔗 **NPM Package:** [superkit-mcp-server]https://www.npmjs.com/package/superkit-mcp-server)
+
+🔗 **NPM Package:** [superkit-mcp-server](https://www.npmjs.com/package/superkit-mcp-server)
 
 ## Directory Structure
 - `agents/`: Contains instructions and guidelines for specialized AI roles (e.g., `data-engineer`).

@@ -96,17 +96,15 @@ Run through each review perspective sequentially:
 
 #### Pass 1: 🔒 Security Review
 
-**Action:** Run the Security Pass workflow from the skill:
-```bash
-cat skills/code-review/workflows/security-pass.md
-```
+**Action:** Perform a comprehensive security review utilizing `@mcp:superkit` security analysis capabilities.
 
-- [ ] Completed security checklist?
-- [ ] NO hardcoded secrets?
-- [ ] Auth guards verified?
+- [ ] Use `@mcp:superkit` to execute a security audit on the modified files to check for vulnerabilities.
+- [ ] Have you verified there are NO hardcoded secrets?
+- [ ] Have you verified Auth guards and Access Controls?
+- [ ] If vulnerabilities are found, produce a structured report and actionable recommendations assigning severity using the Security Severity Assessment rubric.
 
 ```bash
-# Search for potential issues
+# Optional manual fallback if @mcp:superkit tools are unavailable for specific checks
 grep -rn "eval\|exec\|dangerouslySetInnerHTML" --include="*.ts" --include="*.js" src/
 grep -rn "password\|secret\|api_key" --include="*.ts" --include="*.js" src/
 ```

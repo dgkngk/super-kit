@@ -6,6 +6,9 @@ import {
     CallToolRequestSchema,
     ListToolsRequestSchema,
     Tool,
+    ListPromptsRequestSchema,
+    GetPromptRequestSchema,
+    Prompt
 } from "@modelcontextprotocol/sdk/types.js";
 import * as path from "path";
 import * as fs from "fs/promises";
@@ -27,6 +30,7 @@ const server = new Server(
     {
         capabilities: {
             tools: {},
+            prompts: {},
         },
     }
 );
@@ -35,7 +39,7 @@ const server = new Server(
 async function listDirectorySafe(dirPath: string): Promise<string[]> {
     try {
         const entries = await fs.readdir(dirPath, { withFileTypes: true });
-        return entries.map((entry) => (entry.isDirectory() ? `${entry.name}/` : entry.name));
+        return entries.map((entry: any) => (entry.isDirectory() ? `${entry.name}/` : entry.name));
     } catch (err) {
         return [];
     }
@@ -165,7 +169,62 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     return { tools: TOOLS };
 });
 
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(ListPromptsRequestSchema, async () => {
+    try {
+        const workflowsPath = path.join(superKitRoot, "workflows");
+        const workflows = await fs.readdir(workflowsPath);
+        const prompts: Prompt[] = [];
+
+        for (const file of workflows) {
+            if (file.endsWith(".md")) {
+                const filePath = path.join(workflowsPath, file);
+                const content = await fs.readFile(filePath, "utf-8");
+                const descriptionMatch = content.match(/description:\s*(.+)/);
+                const description = descriptionMatch ? descriptionMatch[1].trim() : `Workflow ${file}`;
+
+                prompts.push({
+                    name: file.replace(".md", ""),
+                    description: description,
+                });
+            }
+        }
+        return { prompts };
+    } catch (err: any) {
+        console.error("Error listing prompts:", err.message);
+        return { prompts: [] };
+    }
+});
+
+server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
+    const promptName = request.params.name;
+    const workflowFile = `${promptName}.md`;
+    const basePath = path.join(superKitRoot, "workflows");
+    const safePath = getSafePath(basePath, workflowFile);
+
+    if (!safePath) {
+        throw new Error("Invalid prompt requested");
+    }
+
+    try {
+        const content = await fs.readFile(safePath, "utf-8");
+        return {
+            description: `Loaded workflow: ${promptName}`,
+            messages: [
+                {
+                    role: "user",
+                    content: {
+                        type: "text",
+                        text: content,
+                    },
+                },
+            ],
+        };
+    } catch (error) {
+        throw new Error(`Prompt not found: ${promptName}`);
+    }
+});
+
+server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
     try {
         if (request.params.name === "call_tool_auto_preview") {
             const args = request.params.arguments as any;

@@ -110,6 +110,11 @@ cat plans/{plan-name}.md
 - [ ] Data extremes and migration scenarios
 - [ ] User behavior edge cases
 
+**Security & Privacy Analysis (@mcp:superkit):**
+- [ ] Does the plan introduce potential Injection, Broken Access Control, or Privilege Escalation flaws?
+- [ ] Are Privacy Sources (e.g. PII) routed properly and sanitized before reaching Privacy Sinks?
+- [ ] Execute security review prompts/checks utilizing `@mcp:superkit` for architectural security validation.
+
 **Reproducibility and Transparency (Scientific Review):**
 - [ ] **Data/State Availability:** Are initial states, dummy data, or prerequisites clearly defined?
 - [ ] **Methodological Detail:** Could an independent agent perfectly execute this plan without asking you clarifying questions? 
