@@ -1,3 +1,8 @@
+---
+name: orchestration-protocol
+description: Best practices and patterns for agent coordination, including sequential, parallel, and hybrid models.
+---
+
 # Orchestration Protocol
 
 ## Agent Coordination Patterns

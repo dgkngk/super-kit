@@ -1,3 +1,8 @@
+---
+name: primary-workflow
+description: Information about the primary workflow commands, including /cook for complex features and other quick tasks.
+---
+
 # Primary Workflow
 
 ## The `/cook` Workflow

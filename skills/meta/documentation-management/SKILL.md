@@ -1,3 +1,8 @@
+---
+name: documentation-management
+description: Guidelines on when and where to update documentation, covering READMEs, API docs, and comments.
+---
+
 # Documentation Management
 
 ## When to Update Docs

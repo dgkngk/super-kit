@@ -1,3 +1,8 @@
+---
+name: development-rules
+description: Code quality standards, testing targets, and pre-commit procedures to adhere to during development.
+---
+
 # Development Rules
 
 ## Code Quality Standards
