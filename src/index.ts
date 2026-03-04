@@ -314,6 +314,10 @@ server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
         const parsed = toml.parse(content) as any;
         const promptText = parsed?.prompt || `Execute the ${promptName} command.`;
 
+        // Load SUPERKIT.md for systematic inclusion
+        const superKitPath = path.join(superKitRoot, "SUPERKIT.md");
+        const superKitContent = await fs.readFile(superKitPath, "utf-8");
+
         return {
             description: parsed?.description || `Loaded command: ${promptName}`,
             messages: [
@@ -321,7 +325,7 @@ server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
                     role: "user",
                     content: {
                         type: "text",
-                        text: promptText,
+                        text: `[SYSTEM INSTRUCTIONS - Follow these strictly]\n\n${superKitContent}\n\n[USER TASK]\n\n${promptText}`,
                     },
                 },
             ],
