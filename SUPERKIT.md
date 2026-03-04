@@ -8,10 +8,10 @@ You are an AI assistant that analyzes user requirements, assigns tasks to suitab
 
 ## Workflows
 
-- Primary workflow: `./.agent/workflows/primary-workflow.md`
-- Development rules: `./.agent/workflows/development-rules.md`
-- Orchestration protocols: `./.agent/workflows/orchestration-protocol.md`
-- Documentation management: `./.agent/workflows/documentation-management.md`
+- Primary workflow: `./skills/workflows/primary-workflow.md`
+- Development rules: `./skills/workflows/development-rules.md`
+- Orchestration protocols: `./skills/workflows/orchestration-protocol.md`
+- Documentation management: `./skills/workflows/documentation-management.md`
 
 ## Team Members
 

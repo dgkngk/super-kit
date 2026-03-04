@@ -4,6 +4,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { CallToolRequestSchema, ListToolsRequestSchema, ListPromptsRequestSchema, GetPromptRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import * as path from "path";
 import * as fs from "fs/promises";
+import * as toml from "@iarna/toml";
 import { fileURLToPath } from "url";
 import { manageAutoPreview } from "./tools/autoPreview.js";
 import { manageSession } from "./tools/sessionManager.js";
@@ -254,19 +255,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 });
 server.setRequestHandler(ListPromptsRequestSchema, async () => {
     try {
-        const workflowsPath = path.join(superKitRoot, "workflows");
-        const workflows = await fs.readdir(workflowsPath);
+        const commandsPath = path.join(superKitRoot, "commands");
+        const commandsFiles = await fs.readdir(commandsPath);
         const prompts = [];
-        for (const file of workflows) {
-            if (file.endsWith(".md")) {
-                const filePath = path.join(workflowsPath, file);
+        for (const file of commandsFiles) {
+            if (file.endsWith(".toml")) {
+                const filePath = path.join(commandsPath, file);
                 const content = await fs.readFile(filePath, "utf-8");
-                const descriptionMatch = content.match(/description:\s*(.+)/);
-                const description = descriptionMatch ? descriptionMatch[1].trim() : `Workflow ${file}`;
-                prompts.push({
-                    name: file.replace(".md", ""),
-                    description: description,
-                });
+                try {
+                    const parsed = toml.parse(content);
+                    const description = parsed?.description || `Command ${file}`;
+                    prompts.push({
+                        name: file.replace(".toml", ""),
+                        description: description,
+                    });
+                }
+                catch (e) {
+                    console.error(`Failed to parse TOML ${file}:`, e);
+                }
             }
         }
         return { prompts };
@@ -278,29 +284,31 @@ server.setRequestHandler(ListPromptsRequestSchema, async () => {
 });
 server.setRequestHandler(GetPromptRequestSchema, async (request) => {
     const promptName = request.params.name;
-    const workflowFile = `${promptName}.md`;
-    const basePath = path.join(superKitRoot, "workflows");
-    const safePath = getSafePath(basePath, workflowFile);
+    const commandFile = `${promptName}.toml`;
+    const basePath = path.join(superKitRoot, "commands");
+    const safePath = getSafePath(basePath, commandFile);
     if (!safePath) {
         throw new Error("Invalid prompt requested");
     }
     try {
         const content = await fs.readFile(safePath, "utf-8");
+        const parsed = toml.parse(content);
+        const promptText = parsed?.prompt || `Execute the ${promptName} command.`;
         return {
-            description: `Loaded workflow: ${promptName}`,
+            description: parsed?.description || `Loaded command: ${promptName}`,
             messages: [
                 {
                     role: "user",
                     content: {
                         type: "text",
-                        text: content,
+                        text: promptText,
                     },
                 },
             ],
         };
     }
     catch (error) {
-        throw new Error(`Prompt not found: ${promptName}`);
+        throw new Error(`Prompt not found or invalid format: ${promptName}`);
     }
 });
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -417,11 +425,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             const agentsPath = path.join(superKitRoot, "agents");
             const skillsTechPath = path.join(superKitRoot, "skills", "tech");
             const skillsMetaPath = path.join(superKitRoot, "skills", "meta");
-            const workflowsPath = path.join(superKitRoot, "workflows");
+            const workflowsPath = path.join(superKitRoot, "skills", "workflows");
+            const commandsPath = path.join(superKitRoot, "commands");
             const agents = await listDirectorySafe(agentsPath);
             const techSkills = await listDirectorySafe(skillsTechPath);
             const metaSkills = await listDirectorySafe(skillsMetaPath);
             const workflows = await listDirectorySafe(workflowsPath);
+            const commands = await listDirectorySafe(commandsPath);
             return {
                 content: [
                     {
@@ -433,6 +443,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                                 meta: metaSkills.map((s) => s.replace("/", "")),
                             },
                             workflows: workflows.map((w) => w.replace(".md", "")),
+                            commands: commands.map((c) => c.replace(".toml", "")),
                         }, null, 2),
                     },
                 ],
@@ -477,7 +488,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             if (!args.workflowName)
                 throw new Error("Missing workflowName");
             const workflowFile = `${args.workflowName}.md`;
-            const baseDir = path.join(superKitRoot, "workflows");
+            const baseDir = path.join(superKitRoot, "skills", "workflows");
             const safePath = getSafePath(baseDir, workflowFile);
             if (!safePath)
                 throw new Error("Invalid workflow path");

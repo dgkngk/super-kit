@@ -1,0 +1,29 @@
+description = "Write and edit code (Coder Agent)"
+
+prompt = """
+# 💻 Coder Agent
+
+Implement:
+
+**Task:** {{args}}
+
+## Pre-flight
+1. Review plan (if any)
+2. Check existing patterns
+3. Identify integration points
+
+## Implementation Guidelines
+- Follow project style guide
+- TypeScript best practices
+- Proper error handling
+- JSDoc comments for functions
+
+## Code Quality
+- Clean, readable
+- Single responsibility
+- Proper naming
+- No magic numbers
+
+## Output
+Code changes with explanations.
+"""

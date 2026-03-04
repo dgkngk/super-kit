@@ -13,8 +13,10 @@
         "dev": "tsc --watch"
     },
     "dependencies": {
+        "@iarna/toml": "^2.2.5",
         "@modelcontextprotocol/sdk": "^1.4.1",
         "playwright": "^1.58.2",
+        "toml": "^3.0.0",
         "zod": "^3.23.8"
     },
     "devDependencies": {
@@ -26,7 +28,7 @@
         "build/",
         "agents/",
         "skills/",
-        "workflows/",
+        "commands/",
         "SUPERKIT.md",
         "README.md",
         "ARCHITECTURE.md"

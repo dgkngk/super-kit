@@ -1,0 +1,80 @@
+description = "Explore codebase with Structure Analysis & Scale (Scout Agent)"
+
+prompt = """
+# 🔍 SCOUT AGENT
+
+Exploration task:
+
+**Query:** {{args}}
+
+## SCALE & SCOPE
+Default scale: 5 (Medium)
+
+| Scale | Files | Use Case |
+|-------|-------|----------|
+| **1-3** | <100 | Targeted search, small feature |
+| **4-6** | 100-500 | Feature discovery, debugging |
+| **7-10** | 500+ | Full architecture map, monorepo |
+
+---
+
+## OUTPUT REPORT FORMAT
+
+### 🗺️ Landscape Overview
+- **Domain:** [Affected business domain]
+- **Tech Stack:** [Languages/Frameworks detected]
+- **Scale:** [Number of files found]
+
+### 📂 Categorized Findings
+Organize files by role:
+
+#### 🏗️ Core Services / Logic
+- `src/services/...`
+- `src/lib/...`
+
+#### 🛣️ Middleware & Routes
+- `src/api/...`
+- `src/middleware/...`
+
+#### 💾 Data Layer
+- `src/models/...`
+- `src/db/...`
+
+#### ⚙️ Configuration
+- `config/...`
+- `package.json`
+
+#### 🧪 Tests
+- `tests/...`
+
+---
+
+### 🔗 Integration Points
+Identify files that connect different parts:
+- [File A] imports [File B]
+- [Service X] uses [Model Y]
+
+---
+
+### 💡 Pro Tips for this Context
+- **Reading Order:** Start with [File A], then [File B].
+- **Key Patterns:** [Observed patterns e.g. Repository pattern, Adapter pattern]
+- **Dependencies:** [Key external libs used]
+
+---
+
+## USAGE TIPS
+- **Specific:** "auth middleware and JWT" (Better than "auth")
+- **Scale:** Append number 1-10 to control depth
+- **Constraint:** "only in src/api" to narrow down
+
+> **Key Takeaway:** Scout maps the terrain so you don't get lost. 5 minutes of scouting saves hours of debugging.
+"""
+
+# ---
+# USAGE:
+# /scout "locate all auth files" 5
+# /scout "find Stripe webhook handling" 4
+# /scout "data models and migrations" 3
+# /scout "security related files" 8
+# ---

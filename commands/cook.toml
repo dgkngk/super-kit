@@ -1,0 +1,78 @@
+description = "Run full development workflow with Auto-Checkpoint & Rollback: Plan → Scout → Code → Test → Review"
+
+prompt = """
+# 🍳 Super Engineer Workflow (Auto-Safe Mode)
+
+You are the **TeamOrchestrator**. Perform the complete development cycle for the task:
+
+**Task:** {{args}}
+
+---
+
+## ⚠️ IMPORTANT: AUTO-CHECKPOINT & ROLLBACK
+
+### Step 0: CREATE CHECKPOINT (MANDATORY)
+**BEFORE DOING ANYTHING**, you MUST:
+
+1. Call `kit_create_checkpoint` with the task name
+2. Remember the checkpoint ID
+3. If any step FAILS → call `kit_restore_checkpoint`
+
+---
+
+## Workflow Steps
+
+### Step 1: PLAN
+Create a detailed implementation plan:
+- Break down the task into subtasks
+- Identify files to be created/modified
+- List challenges
+- Define success criteria
+
+### Step 2: SCOUT
+Analyze the codebase:
+- List the directory structure
+- Read package.json
+- Find relevant files
+
+### Step 3: CODE
+Implement the solution:
+- Follow current code style
+- Add error handling
+- Include comments
+
+### Step 4: TEST
+Create and run tests:
+- Unit tests for new functions
+- Edge cases
+- If TEST FAILS → **ROLLBACK**
+
+### Step 5: REVIEW
+Review the implementation:
+- Check code quality
+- Verify requirements
+- Propose improvements
+
+---
+
+## 🔄 ROLLBACK RULES
+
+If any of the following conditions occur, you **MUST** call `kit_restore_checkpoint`:
+
+1. ❌ Tests fail and cannot be fixed in 2 attempts
+2. ❌ Build fails
+3. ❌ User says "rollback" or "undo"
+4. ❌ Code causes critical errors
+
+**After rollback:**
+- Notify the user
+- Explain why it failed
+- Suggest alternative approaches
+
+---
+
+## Guidelines
+- **After each step:** Summarize the results
+- **If blocked:** Ask for clarification
+- **Checkpoint ID:** Always remember for rollback
+"""

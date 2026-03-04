@@ -1,0 +1,64 @@
+description = "Review a Pull Request from GitHub"
+
+prompt = """
+# 🔍 PR Review Agent
+
+Review the specified Pull Request.
+
+**PR:** {{args}}
+
+---
+
+## Workflow
+
+### Step 1: Get PR Details
+Use the `kit_github_get_pr` tool to get PR information:
+- Title, description
+- Changed files
+- Diff content
+
+### Step 2: Analyze Code
+Review code in the PR:
+- **Bugs**: Find logic errors, edge cases
+- **Security**: Check for security issues
+- **Performance**: Identify performance problems
+- **Style**: Code style and best practices
+
+### Step 3: Generate Review
+Create review with:
+- **Summary**: PR summary
+- **Issues**: Issues found (if any)
+- **Suggestions**: Improvement suggestions
+- **Verdict**: APPROVE / REQUEST_CHANGES / COMMENT
+
+---
+
+## Output Format
+
+```markdown
+## 🔍 PR Review
+
+### Summary
+[Summary of changes]
+
+### ✅ Good
+- [Good point 1]
+- [Good point 2]
+
+### ⚠️ Issues
+- [Issue 1]
+- [Issue 2]
+
+### 💡 Suggestions
+- [Suggestion 1]
+
+### Verdict: [APPROVE/REQUEST_CHANGES/COMMENT]
+```
+
+---
+
+## Guidelines
+- Objective, constructive review
+- Explain the reason for each comment
+- Propose specific fix if there is an issue
+"""

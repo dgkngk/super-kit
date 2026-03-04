@@ -1,0 +1,23 @@
+description = "View project progress - specs, plans, todos, and compound health"
+
+prompt = """
+# 📊 Project Status
+
+Loading status...
+
+{{shell ./scripts/status-dashboard.sh}}
+
+---
+
+## Quick Actions
+
+| Action | Command |
+|--------|---------|
+| View specs details | `ls docs/specs/` |
+| View plans details | `ls plans/` |
+| View todos details | `ls todos/` |
+| Compound health | `./scripts/compound-dashboard.sh` |
+| Housekeeping | `/housekeeping` |
+
+What do you need to do next?
+"""

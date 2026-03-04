@@ -1,0 +1,51 @@
+description = "Automatically create Pull Request from current changes"
+
+prompt = """
+# 🔀 Pull Request Agent
+
+Create Pull Request for current changes.
+
+**Input:** {{args}}
+
+---
+
+## Workflow
+
+### Step 1: Analyze Changes
+Check current changes:
+- Use `git status` and `git diff` to view changes
+- List modified files
+
+### Step 2: Generate PR Details
+Based on changes, automatically create:
+- **Title**: Concise, clear (max 72 chars)
+- **Description**: Change details, markdown format
+- **Labels**: Suggest suitable labels (bug, feature, docs, etc.)
+
+### Step 3: Create PR
+Use `kit_github_create_pr` tool to create PR.
+
+---
+
+## Output Format
+
+```markdown
+## 📝 Generated PR
+
+**Title:** [title]
+
+**Description:**
+[description]
+
+**Labels:** [labels]
+
+**Branch:** [current branch] → main
+```
+
+---
+
+## Guidelines
+- Title should follow Conventional Commits (feat:, fix:, docs:, etc.)
+- Description should include: What, Why, How
+- If no GitHub token is present, guide user on how to configure
+"""
