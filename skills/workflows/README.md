@@ -1,7 +1,7 @@
 # Compound Engineering Workflows
 
-> **Quick Start:** New to this project? Read [critical-patterns.md](../docs/solutions/patterns/critical-patterns.md) first.
-> **Technical Architecture:** For the complete system architecture, see [docs/architecture/compound-system.md](../docs/architecture/compound-system.md).
+> **Quick Start:** New to this project? Read [critical-patterns.md](../../docs/solutions/patterns/critical-patterns.md) first.
+> **Technical Architecture:** For the complete system architecture, see [docs/architecture/compound-system.md](../../docs/architecture/compound-system.md).
 
 ## Purpose
 
@@ -164,7 +164,7 @@ ls plans/*.md 2>/dev/null
 ## Directory Structure
 
 ```
-.agent/workflows/     # You are here - all workflow commands
+skills/workflows/     # You are here - all workflow definitions
 docs/solutions/       # Persistent knowledge base
 ├── patterns/         # Critical patterns (READ FIRST)
 ├── schema.yaml       # Solution validation schema
