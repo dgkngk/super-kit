@@ -20,28 +20,32 @@ Check the first word of "{{args}}":
 Save current session:
 1. Capture current context:
    - Current task/goal
-   - Files being worked on
+   - Read context from current directory
    - Recent changes
    - Conversation context
 2. Generate session ID
-3. Save to `.gemini-kit/sessions/`
+3. Save to `docs/agents/sessions/`
 4. Report success with session ID
 
 ### If "load" or "l":
-Load a saved session:
-1. Find session by ID or name (second word)
-2. If no ID given, show list to choose
+Load a session {{args}}:
+1. Read session file from `docs/agents/sessions/`
+2. Apply context to current conversation
 3. Load and display session context
 4. Resume from where left off
 
 ### If "list" or "ls":
 List all saved sessions:
-1. Read `.gemini-kit/sessions/`
+1. Read `docs/agents/sessions/`
 2. Display each session with:
    - ID
    - Name/Task
    - Date
-   - Summary
+   - Status (active/archived)
+
+### If "archive" or "a":
+Archive session {{args}}:
+1. Move session from `docs/agents/sessions/` to `docs/agents/sessions/archive/`
 
 ### If "info" or "i":
 Show current session info:

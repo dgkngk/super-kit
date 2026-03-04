@@ -48,7 +48,7 @@ Create new skill:
 
 ## SKILL FILE STRUCTURE
 
-Create skill file at: `~/.gemini-kit/skills/[skill-name].md`
+Create skill file at: `docs/agents/skills/[skill-name].md`
 
 ```markdown
 # [Skill Name] Skill
@@ -103,7 +103,7 @@ Create skill file at: `~/.gemini-kit/skills/[skill-name].md`
 ## OUTPUT FILES
 
 After creation:
-1. **Skill file:** `~/.gemini-kit/skills/[skill-name].md`
+1. **Skill file:** `docs/agents/skills/[skill-name].md`
 2. **Activation:** Skill auto-activates on matching keywords
 
 ---
@@ -226,7 +226,7 @@ When input starts with "add":
 **Output:**
 ```
 Adding reference to mongodb skill...
-✓ Skill found: ~/.gemini-kit/skills/mongodb.md
+✓ Skill found: docs/agents/skills/mongodb.md
 ✓ Reference: https://docs.mongodb.com/llms.txt
 ✓ Content: 12KB, 45 endpoints
 ✓ Updated: mongodb.md
@@ -331,7 +331,7 @@ When input starts with "optimize:auto" or "optimize-auto":
 
 **Step 1: Create Backup**
 ```
-Backup: ~/.gemini-kit/skills/mongodb/.backup-251215-2110/
+Backup: docs/agents/skills/mongodb/.backup-251215-2110/
 ```
 
 **Step 2: Analyze Goal**

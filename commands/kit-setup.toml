@@ -3,7 +3,7 @@ description = "Interactive project setup wizard - create context files for new p
 prompt = """
 # 🚀 Kit Setup Wizard
 
-Hello! This is the wizard to setup project context for Gemini-Kit.
+Hello! This is the wizard to setup project context for Super-Kit.
 
 ## I will help you create 3 context files:
 
@@ -26,7 +26,7 @@ Please tell me about your project:
 ---
 
 When you finish answering, I will:
-1. Create file `.gemini-kit/product.md`
+1. Create file `docs/agents/product.md`
 2. Continue asking about Tech Stack
 3. Continue asking about Guidelines
 4. Complete setup!

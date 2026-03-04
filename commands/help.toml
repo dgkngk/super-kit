@@ -1,4 +1,4 @@
-# Gemini-Kit Help
+# Super-Kit Help
 # Usage: /help description = "Help and usage information"
 # - /help → Show all commands
 # - /help plan → Show help for /plan
@@ -22,7 +22,7 @@ If {{args}} is a command name (like "plan", "cook", "scout"), explain:
 If {{args}} is "tools", list all 17 MCP tools with descriptions.
 If {{args}} is "hooks", explain the 5 lifecycle hooks.
 {{else}}
-# 🧰 Gemini-Kit Help
+# 🧰 Super-Kit Help
 
 ## 📋 Available Commands (20)
 
@@ -79,6 +79,6 @@ Type `/kit hooks` to see lifecycle hooks.
 **Usage:** `/kit <command>` for detailed help
 **Example:** `/kit plan` or `/kit cook`
 
-**GitHub:** https://github.com/nth5693/gemini-kit
+**GitHub:** https://github.com/dgkngk/super-kit
 {{/if}}
 """

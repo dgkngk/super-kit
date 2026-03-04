@@ -7,13 +7,13 @@ description = "Reference for chat shortcuts and commands"
 
 
 prompt = """
-# 💬 Gemini CLI Chat Reference
+# 💬 Super-Kit Chat Reference
 
-Quick reference for chat mode features in Gemini CLI.
+Quick reference for chat mode features in Super-Kit CLI.
 
 ## Built-in Features
 
-Gemini CLI already supports these in chat:
+Super-Kit CLI already supports these in chat:
 
 ### File Operations
 ```
@@ -33,7 +33,7 @@ Where is login    # Natural language search
 /cook             # Execute with checkpoint
 /scout            # Search codebase
 /code             # Implement features
-...               # All gemini-kit commands
+...               # All super-kit commands
 ```
 
 ## Tips
@@ -53,12 +53,13 @@ Where is login    # Natural language search
 - "Explain in detail" for longer
 - "Show code only" for just code
 
-## Gemini-Kit Chat Commands
+## Super-Kit Chat Commands
 
 | Command | Description |
 |---------|-------------|
-| `/help` | Show all available commands |
-| `/do <task>` | Auto-route to best agent |
+| `/chat` | Show this help |
+| `/chat mode` | Explain AI modes |
+| `/chat tips` | Show power user tips |
 | `/ask <question>` | Ask about codebase |
 | `/watzup` | Project status |
 | `/session save` | Save current context |
@@ -66,8 +67,11 @@ Where is login    # Natural language search
 ## Keyboard Shortcuts
 
 - `Ctrl+C` - Cancel current operation
-- `Ctrl+D` - Exit Gemini CLI
+- `Ctrl+D` - Exit Super-Kit CLI
 - `Up/Down` - Navigate history
 
 That's it! Start chatting naturally with AI.
 """
+
+# ---
+# USAGE:

@@ -1,10 +1,10 @@
 # Commands
 
-This directory contains all **custom slash commands** for the Gemini-Kit extension. Commands are defined as TOML files and automatically loaded by Gemini CLI.
+This directory contains all **custom slash commands** for the Super-Kit extension. Commands are defined as TOML files and automatically loaded by the AI agent client.
 
 ## Overview
 
-Commands extend Gemini CLI's capabilities by providing specialized prompts for specific tasks. Each command file follows the TOML format with `description` and `prompt` fields.
+Commands extend Super-Kit's capabilities by providing specialized prompts for specific tasks. Each command file follows the TOML format with `description` and `prompt` fields.
 
 ## Command Categories
 

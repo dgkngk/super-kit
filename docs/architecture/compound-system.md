@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Compound System transforms Gemini-Kit from a session-to-session amnesiac into a learning partner that compounds its capabilities over time.
+The Compound System transforms Super-Kit from a session-to-session amnesiac into a learning partner that compounds its capabilities over time.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -120,13 +120,13 @@ Track system health and usage:
 5. **Compound**: Document the solution for future reference
 6. **Housekeeping**: Archive completed work, maintain clean state
 
-## Integration with Gemini-Kit
+## Integration with Super-Kit
 
 ### Learning System Bridge
 
-Gemini-Kit's `kit_save_learning` + Compound's Knowledge Base:
+Super-Kit's `kit_save_learning` + Compound's Knowledge Base:
 
-| Gemini-Kit | Compound System |
+| Super-Kit | Compound System |
 |------------|-----------------|
 | `kit_save_learning` | Quick preference capture |
 | `docs/solutions/` | Detailed solution documentation |

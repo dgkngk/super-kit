@@ -12,7 +12,7 @@ Welcome to the Super-Kit documentation! This folder contains detailed informatio
 - **[Architecture Decision Records](decisions/)**: Documentation of major technical decisions made during the project's lifecycle.
 - **[Specifications](specs/)**: Detailed multi-session implementation specifications.
 - **[Explorations](explorations/)**: Deep research artifacts and studies.
-- **[Workflows](WORKFLOWS.md)**: Guide to using workflows in Gemini-Kit / Super-Kit.
+- **[Workflows](WORKFLOWS.md)**: Guide to using workflows in Super-Kit.
 
 ## Project Structure at a Glance
 Super-Kit contains:

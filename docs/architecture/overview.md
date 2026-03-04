@@ -1,6 +1,6 @@
 # Super-Kit Architecture Overview
 
-Super-Kit is a robust, dynamic context management system for AI coding agents. Combining Gemini-Kit and Ag-Kit, it facilitates a T-Shaped AI Team logic mapped closely to modern software engineering workflows.
+Super-Kit is a robust, dynamic context management system for AI coding agents. It facilitates a T-Shaped AI Team logic mapped closely to modern software engineering workflows.
 
 ## The Core Concept: The T-Shaped AI Team
 

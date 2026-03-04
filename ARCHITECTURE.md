@@ -1,12 +1,12 @@
 # Super-Kit Architecture
 
-> Comprehensive AI Agent Capability Expansion Toolkit - Merged from Gemini-Kit and Ag-Kit
+> Comprehensive AI Agent Capability Expansion Toolkit
 
 ---
 
 ## 📋 Overview
 
-Super-Kit is a model-agnostic and agent-agnostic toolkit designed to provide a highly structured engineering loop alongside granular domain expertise. It merges the dynamic workflows of Gemini-Kit with the deep role-based specificities of Ag-Kit.
+Super-Kit is a model-agnostic and agent-agnostic toolkit designed to provide a highly structured engineering loop alongside granular domain expertise.
 
 - **Super Engineers & Domain Specialists** - A T-shaped team of AI personas.
 - **Categorized Skills** - Technical knowledge, meta-engineering, and workflow instructions.
@@ -24,8 +24,8 @@ super-kit/
 │   ├── rules/               # Universal mandates (e.g., clean-code, security-first)
 ├── agents/                  # The T-Shaped AI Team Personas
 ├── skills/                  # The Knowledge Modules
-│   ├── meta/                # Session-resume, compound-docs, file-todos (from gemini-kit)
-│   ├── tech/                # Node.js, React, Python, Prisma (from ag-kit)
+│   ├── meta/                # Session-resume, compound-docs, file-todos
+│   ├── tech/                # Node.js, React, Python, Prisma
 │   └── workflows/           # TDD, CI/CD, Code Review checklists
 └── workflows/               # Slash commands and lifecycle loops
 ```

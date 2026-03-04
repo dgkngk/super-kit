@@ -1,6 +1,6 @@
 # 🔄 Workflows Guide
 
-Guide to using workflows in Gemini-Kit.
+Guide to using workflows in Super-Kit.
 
 ---
 
