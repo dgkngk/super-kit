@@ -17,7 +17,7 @@ Helps agents quickly understand where work left off when starting a new session.
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "session-resume" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "session-resume", outcome: "manual" }
 ```
 
 ---
@@ -54,7 +54,7 @@ After gathering info, summarize:
 ### 4. Check System Health
 
 ```bash
-./scripts/compound-dashboard.sh
+Call MCP `call_tool_compound_manager` { action: "dashboard" }
 ```
 
 Review health grade and recommendations before starting work.

@@ -17,8 +17,8 @@ Attempt to reproduce a reported bug following the steps provided.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/reproduce-bug" "$$"
-./scripts/compound-search.sh "bug reproduction"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/reproduce-bug", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "bug reproduction"] }
 ```
 
 **Action:** Follow `skills/session-resume/SKILL.md` to ensure all previous context and state are restored.
@@ -71,7 +71,7 @@ Execute each step exactly as documented.
 **If reproduced:**
 ```bash
 # Create todo to fix the bug
-./scripts/create-todo.sh "p1" "Fix: {Bug Title}" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p1", title: "Fix: {Bug Title}", description: "TODO description" }
   "Reproduction successful for issue #{issue_number}.\n\nReproduction Details:\n(Link to reproduction steps and results)" \
   "Fix the bug" \
   "Verify fix with reproduction steps"
@@ -80,7 +80,7 @@ Execute each step exactly as documented.
 **If NOT reproduced / Need info:**
 ```bash
 # Create todo to follow up
-./scripts/create-todo.sh "p2" "Follow Up: Issue #{issue_number}" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p2", title: "Follow Up: Issue #{issue_number}", description: "TODO description" }
   "Could not reproduce or need more info for issue #{issue_number}." \
   "Request more information" \
   "Attempt reproduction on different environment"

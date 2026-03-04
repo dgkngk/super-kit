@@ -20,7 +20,7 @@ Guidance and templates for testing in {PROJECT_NAME}. Covers React Component tes
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "testing" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "testing", outcome: "manual" }
 ```
 
 ## What do you want to do?

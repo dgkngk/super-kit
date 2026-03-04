@@ -37,7 +37,7 @@ Capture reusable knowledge while context is fresh—solutions to problems, featu
 ### Step 0: Instrumentation
 
 ```bash
-./scripts/log-workflow.sh "/compound" "$$"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/compound", outcome: "success" }
 ```
 
 ### Step 0.5: Search for Similar Solutions (Recommended)
@@ -46,7 +46,7 @@ Capture reusable knowledge while context is fresh—solutions to problems, featu
 > Check if a similar solution already exists to avoid duplication. Search for keywords related to the problem or feature you are documenting.
 
 ```bash
-./scripts/compound-search.sh "{primary symptom or feature keywords}"
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{primary symptom or feature keywords}"] }
 ```
 ```
 
@@ -168,7 +168,7 @@ grep -l "{key symptom terms}" docs/solutions/**/*.md | wc -l
 
 ```bash
 # Create todo for pattern promotion
-./scripts/create-todo.sh "p2" "Promote Pattern: {Pattern Name}" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p2", title: "Promote Pattern: {Pattern Name}", description: "TODO description" }
   "Pattern identified during solution documentation: {Pattern Name}.\n\nContext:\n(Description of the pattern and why it matters)" \
   "Draft the pattern in docs/solutions/patterns/critical-patterns.md" \
   "Add 'WRONG' vs 'CORRECT' examples" \
@@ -218,7 +218,7 @@ cp todos/todo-template.md todos/${next_id}-pending-p2-{description}.md
 Before closing the `/compound` workflow, run:
 
 ```bash
-./scripts/validate-compound.sh
+Call MCP `call_tool_compound_manager` { action: "validate" }
 ```
 
 - [ ] Script passed?

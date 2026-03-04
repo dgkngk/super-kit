@@ -24,22 +24,22 @@ Start by running the housekeeping orchestrator:
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/housekeeping" "$$"
-./scripts/pre-push-housekeeping.sh
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/housekeeping", outcome: "success" }
+Call MCP `call_tool_git_manager` { action: "housekeeping" }
 ```
 
 ### Step 0.5: Collect Daily Metrics
 
 ```bash
 // turbo
-./scripts/compound-metrics.sh
+Call MCP `call_tool_compound_manager` { action: "metrics" }
 ```
 
 ### Step 0.6: Check for Skill Gaps
 
 ```bash
 // turbo
-./scripts/suggest-skills.sh
+Call MCP `call_tool_compound_manager` { action: "suggestSkills" }
 ```
 
 **If all checks pass (Green):** You are ready to push.
@@ -51,7 +51,7 @@ Run all checks and automatically fix what can be fixed:
 
 ```bash
 // turbo
-./scripts/pre-push-housekeeping.sh --fix
+Call MCP `call_tool_git_manager` { action: "housekeeping" } --fix
 ```
 
 This will:
@@ -70,7 +70,7 @@ Synchronize YAML frontmatter status with checklist completion state:
 
 ```bash
 // turbo
-./scripts/audit-state-drift.sh --fix
+Call MCP `call_tool_compound_manager` { action: "auditDrift" } --fix
 ```
 
 ### Step 2: Archive Completed Items
@@ -79,7 +79,7 @@ Move finished work to their respective `archive/` directories:
 
 ```bash
 // turbo
-./scripts/archive-completed.sh --apply
+Call MCP `call_tool_git_manager` { action: "archive" } --apply
 ```
 
 **What gets archived:**
@@ -115,7 +115,7 @@ Check if the knowledge base suggests new skill opportunities:
 
 ```bash
 // turbo
-./scripts/suggest-skills.sh
+Call MCP `call_tool_compound_manager` { action: "suggestSkills" }
 ```
 
 If new skills are discovered, you can run `/create-agent-skill` to formalize high-priority skills.
@@ -149,7 +149,7 @@ Verify recent changes have corresponding documentation:
 
 ```bash
 // turbo
-./scripts/check-docs-freshness.sh
+Call MCP `call_tool_docs_manager` { action: "freshness" }
 ```
 
 **The script checks:**
@@ -165,7 +165,7 @@ Verify recent changes have corresponding documentation:
 > Before shipping, check for any related housekeeping patterns or recent cleanup solutions.
 
 ```bash
-./scripts/compound-search.sh "housekeeping cleanup archive validation"
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "housekeeping cleanup archive validation"] }
 ```
 
 ---
@@ -176,7 +176,7 @@ Re-run the health check to confirm all issues are resolved:
 
 ```bash
 // turbo
-./scripts/pre-push-housekeeping.sh
+Call MCP `call_tool_git_manager` { action: "housekeeping" }
 ```
 
 **If passed:**
@@ -221,9 +221,9 @@ Next steps:
 
 ## References
 
-- **Archive script:** `scripts/archive-completed.sh`
-- **State audit:** `scripts/audit-state-drift.sh`
-- **Health check:** `scripts/pre-push-housekeeping.sh`
+- **Archive script:** `Call MCP `call_tool_git_manager` { action: "archive" }`
+- **State audit:** `Call MCP `call_tool_compound_manager` { action: "auditDrift" }`
+- **Health check:** `Call MCP `call_tool_git_manager` { action: "housekeeping" }`
 - **Todo management:** `/resolve_todo`
 - **Plan creation:** `/plan`
 

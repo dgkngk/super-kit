@@ -22,8 +22,8 @@ Even if the todo contains a proposed solution, check for newer patterns or relat
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/resolve_todo" "$$"
-./scripts/compound-search.sh "{relevant keywords}"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/resolve_todo", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{relevant keywords}"] }
 ```
 
 ---
@@ -64,7 +64,7 @@ For each todo:
 4. **Update:** Complete the todo atomically
 
 ```bash
-./scripts/complete-todo.sh todos/{id}-ready-{pri}-{desc}.md
+Call MCP `call_tool_todo_manager` { action: "complete", todoId: "todos/{id}-ready-{pri}-{desc}.md" }
 ```
 
 This script atomically updates YAML status AND renames the file.

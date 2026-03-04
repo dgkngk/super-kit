@@ -12,8 +12,8 @@ Deploy documentation to hosting platform.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/deploy-docs" "$$"
-./scripts/compound-search.sh "deployment"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/deploy-docs", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "deployment"] }
 ```
 
 ### Step 1: Build Documentation

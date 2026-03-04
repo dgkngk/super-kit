@@ -23,8 +23,8 @@ Conduct a deep, systematic pre-planning investigation to gather industry best pr
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/explore" "$$"
-./scripts/compound-search.sh "exploration"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/explore", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "exploration"] }
 ```
 
 ### Step 1: Search Existing Knowledge (MANDATORY)
@@ -34,7 +34,7 @@ Conduct a deep, systematic pre-planning investigation to gather industry best pr
 
 ```bash
 // turbo
-./scripts/compound-search.sh "{keywords}"
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{keywords}"] }
 ls docs/explorations/*.md | grep "{keyword}"
 ```
 

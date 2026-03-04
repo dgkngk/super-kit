@@ -12,8 +12,8 @@ Prepare documentation for a new release.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/release-docs" "$$"
-./scripts/compound-search.sh "release notes"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/release-docs", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "release notes"] }
 ```
 
 ### Step 1: Update Version

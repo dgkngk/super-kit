@@ -22,8 +22,8 @@ Rapidly process pending work items with strict time-boxing to clear backlog bott
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/triage-sprint" "$$"
-./scripts/compound-search.sh "triage" "prioritization"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/triage-sprint", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "triage" "prioritization"] }
 ```
 
 ---

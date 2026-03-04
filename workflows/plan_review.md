@@ -26,9 +26,9 @@ Review an implementation plan for completeness and quality before execution.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/plan_review" "$$"
-./scripts/compound-search.sh "{main problem keywords}"
-./scripts/log-skill.sh "compound-docs" "workflow" "/plan_review"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/plan_review", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{main problem keywords}"] }
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "compound-docs", outcome: "workflow" }
 ```
 
 **See also:** `skills/compound-docs/SKILL.md` for cross-referencing findings.
@@ -38,7 +38,7 @@ Review an implementation plan for completeness and quality before execution.
 2. Update references if the plan should use existing solutions:
    ```bash
    // turbo
-   ./scripts/update-solution-ref.sh {paths}
+   Call MCP `call_tool_compound_manager` { action: "updateRef", files: ["{paths}"] }
    ```
 
 #### ⛔ CHECKPOINT: Did the plan author run compound-search?
@@ -202,7 +202,7 @@ Once the plan is approved and the status is updated:
 > **Action Required.** Don't just leave feedback in the chat. Create a todo for the revision work.
 
 ```bash
-./scripts/create-todo.sh "p1" "Revise Plan: ${plan_name}" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p1", title: "Revise Plan: ${plan_name}", description: "TODO description" }
   "Plan review identified major issues in plans/${plan_name}.md that need to be addressed before execution can proceed.\n\nConcerns:\n(Paste summary of concerns here)" \
   "Revise plan to address concerns" \
   "Re-request review"
@@ -264,6 +264,6 @@ Next steps:
 
 - Create plans: `/plan`
 - Execute plans: `/work`
-- Search solutions: `./scripts/compound-search.sh`
+- Search solutions: `Call MCP `call_tool_compound_manager` { action: "search", terms: [] }`
 - Archive when done: `/housekeeping`
 

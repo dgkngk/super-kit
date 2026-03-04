@@ -34,8 +34,8 @@ Capture long-term architectural choices that should persist beyond individual pl
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/adr" "$$"
-./scripts/compound-search.sh "architectural decision"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/adr", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "architectural decision"] }
 ```
 
 ### Step 1: Check Existing ADRs (MANDATORY)
@@ -45,7 +45,7 @@ Capture long-term architectural choices that should persist beyond individual pl
 
 ```bash
 // turbo
-./scripts/compound-search.sh "{decision keywords}"
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{decision keywords}"] }
 ```
 
 If an existing ADR covers this decision → Reference it; don't create a duplicate.
@@ -169,6 +169,6 @@ Next steps:
 
 - Directory: `docs/decisions/`
 - Template: `docs/decisions/adr-template.md`
-- Search decisions: `./scripts/compound-search.sh`
+- Search decisions: `Call MCP `call_tool_compound_manager` { action: "search", terms: [] }`
 - Integration: `/plan` Step 5.5 and `/specs` Step 4
 - Standard: [Michael Nygard's ADR format](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)

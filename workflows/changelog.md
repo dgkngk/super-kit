@@ -12,8 +12,8 @@ Create changelog entries from git history automatically using conventional commi
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/changelog" "$$"
-./scripts/compound-search.sh "changelog generation"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/changelog", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "changelog generation"] }
 ```
 
 ### Step 1: Run Generation Script
@@ -70,5 +70,5 @@ Next steps:
 
 ## References
 
-- Implementation: `scripts/generate-changelog.js`
+- Implementation: `Call MCP `call_tool_git_manager` { action: "changelog" }`
 - Version documentation: `/release-docs`

@@ -22,9 +22,9 @@ Systematically review and promote suggested skills to formal capabilities.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/skill-review" "$$"
-./scripts/compound-search.sh "skill patterns" "agent capabilities"
-./scripts/log-skill.sh "compound-docs" "workflow" "/skill-review"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/skill-review", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "skill patterns" "agent capabilities"] }
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "compound-docs", outcome: "workflow" }
 ```
 
 ---
@@ -60,7 +60,7 @@ For each top candidate:
 
 2. **Check for existing solutions:**
    ```bash
-   ./scripts/compound-search.sh "{candidate name}"
+   Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{candidate name}"] }
    ```
 
 ---

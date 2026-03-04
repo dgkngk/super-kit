@@ -22,8 +22,8 @@ Orchestrate the full "essential" development lifecycle for small, self-contained
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/cycle" "$$"
-./scripts/compound-search.sh "unified workflow" "cycle"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/cycle", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "unified workflow" "cycle"] }
 ```
 
 ### Step 1: Planning
@@ -61,7 +61,7 @@ Execute the plan systematically.
 ```
 
 *Guidance:*
-- Mark the todo as in-progress: `./scripts/start-todo.sh todos/{todo}.md`
+- Mark the todo as in-progress: `Call MCP `call_tool_todo_manager` { action: "start", todoId: "todos/{todo}.md`" }
 - Create tests first if possible.
 - Update todos as you go.
 
@@ -86,7 +86,7 @@ Review the code changes.
 **If this /cycle was triggered by a todo file:**
 
 ```bash
-./scripts/done-todo.sh todos/{todo-filename}.md
+Call MCP `call_tool_todo_manager` { action: "done", todoId: "todos/{todo-filename}.md" }
 ```
 
 **Why:** This script updates YAML status AND renames the file atomically, preventing state drift ([Pattern #10](../../docs/solutions/patterns/critical-patterns.md#pattern-10-atomic-state-transitions)).

@@ -20,8 +20,8 @@ Work through PR comments and review feedback systematically.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/resolve_pr" "$$"
-./scripts/compound-search.sh "pull request review"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/resolve_pr", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "pull request review"] }
 ```
 
 ### Step 1: Fetch PR Comments

@@ -37,7 +37,7 @@ Check if a `README.md` exists. If not, bootstrap it using the template.
 ls {folder_path}/README.md
 
 # If missing, use bootstrap script
-./scripts/bootstrap-folder-docs.sh {folder_path}
+Call MCP `call_tool_docs_manager` { action: "bootstrap", folder: "{folder_path}" }
 ```
 
 ### Step 3: Update Components Table
@@ -72,8 +72,8 @@ Ensure any newly added links to ADRs or other documentation are valid.
 ### Step 7: Integration Audit (Sibling Parity)
 
 If you created a NEW folder, ensure it is covered by the validation system:
-1. Run `./scripts/discover-undocumented-folders.sh` to verify discovery.
-2. Run `./scripts/validate-folder-docs.sh` to verify structure.
+1. Run `Call MCP `call_tool_docs_manager` { action: "discover" }` to verify discovery.
+2. Run `Call MCP `call_tool_docs_manager` { action: "validate", strict: false }` to verify structure.
 3. If new patterns were established, update `docs/solutions/patterns/critical-patterns.md`.
 
 ---

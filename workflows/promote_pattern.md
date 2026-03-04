@@ -13,8 +13,8 @@ Goal: Synthesize individual solutions into a reusable engineering pattern.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/promote_pattern" "$$"
-./scripts/compound-search.sh "design pattern"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/promote_pattern", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "design pattern"] }
 ```
 
 ### Step 1: Analyze Sources

@@ -24,7 +24,7 @@ When you solve a problem, document it so the solution can be found and reused la
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "compound-docs" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "compound-docs", outcome: "manual" }
 ```
 
 ## Searching Solutions

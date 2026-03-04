@@ -12,14 +12,14 @@ Use this workflow weekly to ensure the Compound System is actually working.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/compound_health" "$$"
-./scripts/compound-search.sh "system health"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/compound_health", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "system health"] }
 ```
 
 ### Step 1: Run Health Dashboard
 
 ```bash
-./scripts/compound-health.sh
+Call MCP `call_tool_compound_manager` { action: "health" }
 ```
 
 ### Step 2: Analyze Metrics
@@ -71,4 +71,4 @@ Next steps:
 
 ## References
 
-- [Health Script](../../scripts/compound-health.sh)
+- [Health Script](Call MCP `call_tool_compound_manager` { action: "health" })

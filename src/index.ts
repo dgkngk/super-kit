@@ -18,6 +18,12 @@ import { manageAutoPreview } from "./tools/autoPreview.js";
 import { manageSession } from "./tools/sessionManager.js";
 import { runChecklist } from "./tools/checklist.js";
 import { runVerifyAll } from "./tools/verifyAll.js";
+import { logSkill, logWorkflow, rotateLogs } from "./tools/loggerTools.js";
+import { getNextTodoId, createTodo, startTodo, doneTodo, completeTodo } from "./tools/todoTools.js";
+import { compoundSearch, updateSolutionRef, validateCompound, auditStateDrift, suggestSkills, compoundHealth, compoundDashboard, compoundMetrics } from "./tools/compoundTools.js";
+import { bootstrapFolderDocs, checkDocsFreshness, discoverUndocumentedFolders, validateFolderDocs } from "./tools/docsTools.js";
+import { generateChangelog, validateChangelog, archiveCompleted, prePushHousekeeping } from "./tools/gitTools.js";
+import { validateSpecConsistency, completePlan, validateArchitecture, syncSpec, updateSpecPhase } from "./tools/archTools.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const superKitRoot = path.resolve(__dirname, "../");
@@ -106,6 +112,100 @@ const TOOLS: Tool[] = [
                 stopOnFail: { type: "boolean", default: false }
             },
             required: ["projectPath", "url"]
+        }
+    },
+    {
+        name: "call_tool_logger_manager",
+        description: "Manages tool logging operations (skills, workflows, log rotation)",
+        inputSchema: {
+            type: "object",
+            properties: {
+                action: { type: "string", enum: ["logSkill", "logWorkflow", "rotateLogs"] },
+                name: { type: "string" },
+                outcome: { type: "string" },
+                projectPath: { type: "string", default: "." }
+            },
+            required: ["action", "projectPath"]
+        }
+    },
+    {
+        name: "call_tool_todo_manager",
+        description: "Manages todos (nextId, create, start, done, complete)",
+        inputSchema: {
+            type: "object",
+            properties: {
+                action: { type: "string", enum: ["nextId", "create", "start", "done", "complete"] },
+                title: { type: "string" },
+                description: { type: "string" },
+                priority: { type: "number" },
+                todoId: { type: "string" },
+                force: { type: "boolean", default: false },
+                projectPath: { type: "string", default: "." }
+            },
+            required: ["action", "projectPath"]
+        }
+    },
+    {
+        name: "call_tool_compound_manager",
+        description: "Manages compound knowledge capabilities (search, updateRef, validate, auditDrift, suggestSkills, health, dashboard, metrics)",
+        inputSchema: {
+            type: "object",
+            properties: {
+                action: { type: "string", enum: ["search", "updateRef", "validate", "auditDrift", "suggestSkills", "health", "dashboard", "metrics"] },
+                terms: { type: "array", items: { type: "string" } },
+                files: { type: "array", items: { type: "string" } },
+                fix: { type: "boolean", default: false },
+                force: { type: "boolean", default: false },
+                projectPath: { type: "string", default: "." }
+            },
+            required: ["action", "projectPath"]
+        }
+    },
+    {
+        name: "call_tool_docs_manager",
+        description: "Manages documentation (bootstrap, freshness, discover, validate)",
+        inputSchema: {
+            type: "object",
+            properties: {
+                action: { type: "string", enum: ["bootstrap", "freshness", "discover", "validate"] },
+                folder: { type: "string" },
+                skipDocs: { type: "boolean", default: false },
+                strict: { type: "boolean", default: false },
+                targetFolders: { type: "array", items: { type: "string" } },
+                projectPath: { type: "string", default: "." }
+            },
+            required: ["action", "projectPath"]
+        }
+    },
+    {
+        name: "call_tool_git_manager",
+        description: "Manages git and housekeeping tasks (changelog, validateChangelog, archive, housekeeping)",
+        inputSchema: {
+            type: "object",
+            properties: {
+                action: { type: "string", enum: ["changelog", "validateChangelog", "archive", "housekeeping"] },
+                applyFix: { type: "boolean", default: false },
+                projectPath: { type: "string", default: "." }
+            },
+            required: ["action", "projectPath"]
+        }
+    },
+    {
+        name: "call_tool_arch_manager",
+        description: "Manages architecture and specs tasks (validateSpecs, completePlan, validateArch, syncSpec, updatePhase)",
+        inputSchema: {
+            type: "object",
+            properties: {
+                action: { type: "string", enum: ["validateSpecs", "completePlan", "validateArch", "syncSpec", "updatePhase"] },
+                planFile: { type: "string" },
+                force: { type: "boolean", default: false },
+                specDir: { type: "string" },
+                specName: { type: "string" },
+                phaseNum: { type: "string" },
+                status: { type: "string" },
+                projectPath: { type: "string", default: "." }
+            },
+            required: ["action", "projectPath"]
         }
     },
     {
@@ -246,6 +346,66 @@ server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
             const res = await runVerifyAll(args.projectPath, args.url, args.skipE2E, args.stopOnFail);
             return { content: [{ type: "text", text: res }] };
         }
+        if (request.params.name === "call_tool_logger_manager") {
+            const args = request.params.arguments as any;
+            let res = "";
+            if (args.action === "logSkill") res = await logSkill(args.name, args.outcome, args.projectPath);
+            else if (args.action === "logWorkflow") res = await logWorkflow(args.name, args.outcome, args.projectPath);
+            else if (args.action === "rotateLogs") res = await rotateLogs(args.projectPath);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_todo_manager") {
+            const args = request.params.arguments as any;
+            let res = "";
+            if (args.action === "nextId") res = String(await getNextTodoId(args.projectPath));
+            else if (args.action === "create") res = await createTodo(args.title, args.description, args.priority, args.projectPath);
+            else if (args.action === "start") res = await startTodo(args.todoId, args.force, args.projectPath);
+            else if (args.action === "done") res = await doneTodo(args.todoId, args.force, args.projectPath);
+            else if (args.action === "complete") res = await completeTodo(args.todoId, args.force, args.projectPath);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_compound_manager") {
+            const args = request.params.arguments as any;
+            let res = "";
+            if (args.action === "search") res = await compoundSearch(args.terms || [], args.projectPath);
+            else if (args.action === "updateRef") res = await updateSolutionRef(args.files || [], args.projectPath);
+            else if (args.action === "validate") res = await validateCompound(args.projectPath);
+            else if (args.action === "auditDrift") res = await auditStateDrift(args.projectPath, args.fix);
+            else if (args.action === "suggestSkills") res = await suggestSkills(args.projectPath);
+            else if (args.action === "health") res = await compoundHealth(args.projectPath);
+            else if (args.action === "dashboard") res = await compoundDashboard(args.projectPath);
+            else if (args.action === "metrics") res = await compoundMetrics(args.projectPath, args.force);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_docs_manager") {
+            const args = request.params.arguments as any;
+            let res = "";
+            if (args.action === "bootstrap") res = await bootstrapFolderDocs(args.folder, args.projectPath);
+            else if (args.action === "freshness") res = await checkDocsFreshness(args.skipDocs, args.projectPath);
+            else if (args.action === "discover") res = await discoverUndocumentedFolders(args.projectPath);
+            else if (args.action === "validate") res = await validateFolderDocs(args.strict, args.targetFolders || [], args.projectPath);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_git_manager") {
+            const args = request.params.arguments as any;
+            let res = "";
+            if (args.action === "changelog") res = await generateChangelog(args.projectPath);
+            else if (args.action === "validateChangelog") res = await validateChangelog(args.projectPath);
+            else if (args.action === "archive") res = await archiveCompleted(args.projectPath, args.applyFix);
+            else if (args.action === "housekeeping") res = await prePushHousekeeping(args.projectPath, args.applyFix);
+            return { content: [{ type: "text", text: res }] };
+        }
+        if (request.params.name === "call_tool_arch_manager") {
+            const args = request.params.arguments as any;
+            let res = "";
+            if (args.action === "validateSpecs") res = await validateSpecConsistency(args.projectPath);
+            else if (args.action === "completePlan") res = await completePlan(args.planFile, args.force, args.projectPath);
+            else if (args.action === "validateArch") res = await validateArchitecture(args.projectPath);
+            else if (args.action === "syncSpec") res = await syncSpec(args.specDir, args.projectPath);
+            else if (args.action === "updatePhase") res = await updateSpecPhase(args.specName, String(args.phaseNum), args.status, args.projectPath);
+            return { content: [{ type: "text", text: res }] };
+        }
+
         if (request.params.name === "list_superkit_assets") {
             const agentsPath = path.join(superKitRoot, "agents");
             const skillsTechPath = path.join(superKitRoot, "skills", "tech");

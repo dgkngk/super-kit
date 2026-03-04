@@ -19,11 +19,11 @@ For unified testing patterns and templates, refer to the testing skill:
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/xcode-test" "$$"
-./scripts/compound-search.sh "ios testing"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/xcode-test", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "ios testing"] }
 ```
 cat skills/testing/SKILL.md
-./scripts/log-skill.sh "testing" "workflow" "/xcode-test"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "testing", outcome: "workflow" }
 ```
 
 ### Step 1: Run Tests

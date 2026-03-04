@@ -23,8 +23,8 @@ Go through findings one by one and decide whether to create todo items for them.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/triage" "$$"
-./scripts/compound-search.sh "prioritization"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/triage", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "prioritization"] }
 ```
 
 ### Step 0.1: Search Related Solutions
@@ -33,7 +33,7 @@ Before approving a finding into a "ready" todo, check if this issue was already 
 
 ```bash
 // turbo
-./scripts/compound-search.sh "{finding keywords}"
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{finding keywords}"] }
 ```
 
 ---

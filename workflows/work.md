@@ -25,7 +25,7 @@ Execute a work plan efficiently while maintaining quality and finishing features
 
 ```bash
 cat skills/session-resume/SKILL.md
-./scripts/log-skill.sh "session-resume" "workflow" "/work"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "session-resume", outcome: "workflow" }
 ```
 
 ### Step 0: Search Before Solving
@@ -34,9 +34,9 @@ Before diving in, check if similar problems were solved:
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/work" "$$"
-./scripts/compound-search.sh "{relevant keywords}"
-./scripts/log-skill.sh "compound-docs" "workflow" "/work"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/work", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{relevant keywords}"] }
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "compound-docs", outcome: "workflow" }
 ```
 
 This 30-second search can save hours of reinventing solutions.
@@ -210,7 +210,7 @@ If any implementation tasks remain unchecked (scope reduced, deferred, etc.):
 
 ```bash
 # Create todo for each uncompleted task
-./scripts/create-todo.sh "p2" "{description}" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p2", title: "{description}", description: "TODO description" }
   "Task from /work workflow that was not completed: {description}." \
   "Complete task" "Verify implementation"
 ```
@@ -259,8 +259,8 @@ npm run changelog:gen
 > **BLOCKING STEP:** You must run this BEFORE committing user-facing changes if working from a todo.
 
 ```bash
-./scripts/complete-todo.sh todos/{todo-filename}.md
-./scripts/log-skill.sh "file-todos" "workflow" "/work"
+Call MCP `call_tool_todo_manager` { action: "complete", todoId: "todos/{todo-filename}.md" }
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "file-todos", outcome: "workflow" }
 ```
 
 #### Commit Changes
@@ -307,7 +307,7 @@ If your plan is located in `docs/specs/{name}/plans/`:
 1. **Run Automation Script:**
    ```bash
    // turbo
-   ./scripts/update-spec-phase.sh {spec_name} {phase_num} complete
+   Call MCP `call_tool_arch_manager` { action: "updatePhase", specName: "{spec_name}", phaseNum: "{phase_num}", status: "complete" }
    ```
    *This single command updates `03-tasks.md`, `README.md`, and `00-START-HERE.md` ensuring they are perfectly in sync.*
 

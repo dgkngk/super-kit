@@ -27,8 +27,8 @@ Verify that a similar skill doesn't already exist or that existing scripts can't
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/create-agent-skill" "$$"
-./scripts/compound-search.sh "new skill creation"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/create-agent-skill", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "new skill creation"] }
 
 ls skills/
 grep -r "{skill keywords}" skills/
@@ -70,7 +70,7 @@ description: {what this skill provides}
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "{skill-name}" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "{skill-name}", outcome: "manual" }
 ```
 
 ## What do you want to do?

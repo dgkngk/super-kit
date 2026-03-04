@@ -32,8 +32,8 @@ Create and manage structured specifications for large, multi-session initiatives
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/specs" "$$"
-./scripts/compound-search.sh "{initiative keywords}"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/specs", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{initiative keywords}"] }
 ```
 
 **Output required:**
@@ -160,13 +160,13 @@ When completing a phase:
 2. **Automate Summary Updates** (MANDATORY):
    ```bash
    // turbo
-   ./scripts/update-spec-phase.sh {spec_name} {phase_num} complete
+   Call MCP `call_tool_arch_manager` { action: "updatePhase", specName: "{spec_name}", phaseNum: "{phase_num}", status: "complete" }
    ```
    *This atomically updates README.md, START-HERE.md, and 03-tasks.md summary table.*
 3. **Run /plan** for next phase
    ```bash
    // turbo
-   ./scripts/update-spec-phase.sh {spec_name} {next_phase_num} started
+   Call MCP `call_tool_arch_manager` { action: "updatePhase", specName: "{spec_name}", phaseNum: "{next_phase_num}", status: "started" }
    ```
 
 ---

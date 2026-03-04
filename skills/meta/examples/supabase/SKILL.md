@@ -26,7 +26,7 @@ Provides comprehensive expertise for Supabase development in [PROJECT_NAME] incl
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "supabase" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "supabase", outcome: "manual" }
 ```
 
 ## What do you want to do?

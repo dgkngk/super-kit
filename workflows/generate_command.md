@@ -12,8 +12,8 @@ Generate new workflow commands with proper structure.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/generate_command" "$$"
-./scripts/compound-search.sh "workflow command"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/generate_command", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "workflow command"] }
 ```
 
 ### Step 1: Define Command

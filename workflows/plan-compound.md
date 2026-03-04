@@ -30,8 +30,8 @@ Transform feature descriptions, bug reports, or improvement ideas into well-stru
 **Run the auto-searcher:**
 ```bash
 // turbo
-./scripts/log-workflow.sh "/plan" "$$"
-./scripts/compound-search.sh "{keyword1}" "{keyword2}"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/plan", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{keyword1}" "{keyword2}"] }
 ```
 
 **See also:** `skills/compound-docs/SKILL.md` for advanced searching and pattern promotion.
@@ -44,7 +44,7 @@ Copy the **table** AND the **update command** from the script output into your p
 2. Execute the update command to track usage:
    ```bash
    // turbo
-   ./scripts/update-solution-ref.sh {paths from search output}
+   Call MCP `call_tool_compound_manager` { action: "updateRef", files: ["{paths from search output}"] }
    ```
 
 ---
@@ -352,7 +352,7 @@ What's next?
 **If YES:**
 ```bash
 # Create todo for each deferred item
-./scripts/create-todo.sh "p3" "{description}" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p3", title: "{description}", description: "TODO description" }
   "Deferred item from plan {feature-name}. This feature was identified as valuable but out of scope for the initial implementation." \
   "Implement feature" "Verify functionality"
 ```

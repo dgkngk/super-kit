@@ -29,7 +29,7 @@ Perform exhaustive code reviews using multi-perspective analysis to catch issues
 
 ```bash
 cat skills/session-resume/SKILL.md
-./scripts/log-skill.sh "session-resume" "workflow" "/review"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "session-resume", outcome: "workflow" }
 ```
 
 ### Step 0: Load Code Review Skill (MANDATORY)
@@ -39,10 +39,10 @@ cat skills/session-resume/SKILL.md
 
 ```bash
 # Data collection
-./scripts/log-workflow.sh "/review" "$$"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/review", outcome: "success" }
 
 cat skills/code-review/SKILL.md
-./scripts/log-skill.sh "code-review" "workflow" "/review"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "code-review", outcome: "workflow" }
 ```
 
 ### Step 1: Determine Review Target
@@ -77,7 +77,7 @@ Before reviewing, understand:
 > Use search to find similar past issues or patterns.
 
 ```bash
-./scripts/compound-search.sh "{change type or component keywords}"
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{change type or component keywords}"] }
 ```
 
 ```bash
@@ -227,7 +227,7 @@ For each P1/P2 finding, create a todo.
 
 ```bash
 # Create todos using the centralized generator
-./scripts/create-todo.sh "p1" "Security: SQL Injection in User Query" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p1", title: "Security: SQL Injection in User Query", description: "TODO description" }
   "Raw user input is used in database query at src/api/users.ts:45. This enables potential SQL injection attacks allowing unauthorized data access." \
   "Replace raw query with parameterized version" \
   "Add input validation" \
@@ -307,7 +307,7 @@ If **yes** to any → Run `/compound` to document the learning.
 
 Before closing, run:
 ```bash
-./scripts/validate-compound.sh
+Call MCP `call_tool_compound_manager` { action: "validate" }
 ```
 
 - [ ] Script passed?

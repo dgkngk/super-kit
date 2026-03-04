@@ -20,7 +20,7 @@ Don't guess; verify. This skill guides you through the systematic process of ide
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "debug" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "debug", outcome: "manual" }
 ```
 
 ## What do you want to do?

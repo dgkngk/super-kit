@@ -12,8 +12,8 @@ Diagnose and repair skills that aren't functioning correctly.
 
 ```bash
 // turbo
-./scripts/log-workflow.sh "/heal-skill" "$$"
-./scripts/compound-search.sh "broken skill"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/heal-skill", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "broken skill"] }
 ```
 
 ### Step 1: Identify the Issue
@@ -32,7 +32,7 @@ ls skills/{skill-name}/
 
 # Verify SKILL.md
 cat skills/{skill-name}/SKILL.md
-./scripts/log-skill.sh "{skill-name}" "workflow" "/heal-skill"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "{skill-name}", outcome: "workflow" }
 
 # Check for broken links
 grep -r "Read \`" skills/{skill-name}/ | while read line; do

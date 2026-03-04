@@ -43,7 +43,7 @@ pending → ready → complete
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "file-todos" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "file-todos", outcome: "manual" }
 ```
 
 ## Creating Todos

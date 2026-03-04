@@ -16,8 +16,8 @@ Create detailed bug reports with reproduction steps.
 **Run the auto-searcher:**
 ```bash
 // turbo
-./scripts/log-workflow.sh "/report-bug" "$$"
-./scripts/compound-search.sh "{keyword1}" "{keyword2}"
+Call MCP `call_tool_logger_manager` { action: "logWorkflow", name: "/report-bug", outcome: "success" }
+Call MCP `call_tool_compound_manager` { action: "search", terms: [ "{keyword1}" "{keyword2}"] }
 ```
 
 **See also:** `skills/compound-docs/SKILL.md` for advanced searching and checking if similar bugs are already reported.
@@ -29,7 +29,7 @@ Create detailed bug reports with reproduction steps.
 4. Execute the update command to track usage if it's a solved problem:
    ```bash
    // turbo
-   ./scripts/update-solution-ref.sh {paths from search output}
+   Call MCP `call_tool_compound_manager` { action: "updateRef", files: ["{paths from search output}"] }
    ```
 
 ---
@@ -41,7 +41,7 @@ Create detailed bug reports with reproduction steps.
 
 ```bash
 cat skills/debug/SKILL.md
-./scripts/log-skill.sh "debug" "workflow" "/report-bug"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "debug", outcome: "workflow" }
 ```
 
 - [ ] **What happened:** Observable behavior
@@ -97,7 +97,7 @@ gh issue create --title "Bug: {description}" --body "$(cat bug-report.md)"
 
 ```bash
 # Create local todo
-./scripts/create-todo.sh "p1" "Fix: {Bug Title}" \
+Call MCP `call_tool_todo_manager` { action: "create", priority: "p1", title: "Fix: {Bug Title}", description: "TODO description" }
   "External Tracking: GitHub Issue #{issue_number}.\n\nBug Description:\n(Brief description here)" \
   "Fix the bug reported in issue #{issue_number}" \
   "Add regression test"

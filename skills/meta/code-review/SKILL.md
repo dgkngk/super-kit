@@ -20,7 +20,7 @@ A systematic approach to code review that moves beyond "it looks good" to rigoro
 
 ```bash
 # Log usage when using this skill
-./scripts/log-skill.sh "code-review" "manual" "$$"
+Call MCP `call_tool_logger_manager` { action: "logSkill", name: "code-review", outcome: "manual" }
 ```
 
 ## What do you want to do?
