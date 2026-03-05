@@ -69,7 +69,7 @@ Modular capabilities that agents can invoke:
 | `testing` | Unified test patterns |
 | `debug` | Structured root cause analysis |
 
-### 3. Workflows (`.agent/workflows/`)
+### 3. Workflows (`skills/workflows/`)
 
 32 structured workflows for systematic development:
 
@@ -81,27 +81,24 @@ Modular capabilities that agents can invoke:
 - `/compound` → Document solutions
 - `/housekeeping` → Archive and cleanup
 
-### 4. Scripts (`scripts/`)
+### 4. MCP Tools
 
-50+ automation scripts:
+All automation is provided through MCP tools:
 
-| Category | Examples |
+| Category | MCP Tool |
 |----------|----------|
-| Search | `compound-search.sh` |
-| Health | `compound-dashboard.sh`, `compound-health.sh` |
-| Todos | `create-todo.sh`, `complete-todo.sh` |
-| Validation | `validate-*.sh` |
-| Metrics | `log-skill.sh`, `log-workflow.sh` |
+| Search | `call_tool_compound_manager` { action: "search" } |
+| Health | `call_tool_compound_manager` { action: "dashboard" / "health" } |
+| Todos | `call_tool_todo_manager` { action: "create" / "done" } |
+| Validation | `call_tool_docs_manager` { action: "validate" } |
+| Metrics | `call_tool_logger_manager` { action: "logSkill" / "logWorkflow" } |
 
-### 5. Telemetry (`.agent/metrics/`, `.agent/logs/`)
+### 5. Telemetry (`docs/agents/logs/`)
 
 Track system health and usage:
 
 ```
-.agent/
-├── metrics/
-│   ├── compound_history.json  # Health snapshots
-│   └── unused_workflows.txt   # Workflow coverage
+docs/agents/
 └── logs/
     ├── compound_usage.log     # Search usage
     └── workflow_usage.log     # Workflow invocations
@@ -135,19 +132,19 @@ Super-Kit's `kit_save_learning` + Compound's Knowledge Base:
 ### Agent Behaviors
 
 Agents should:
-1. **Search before solving**: `./scripts/compound-search.sh`
+1. **Search before solving**: MCP `call_tool_compound_manager` { action: "search" }
 2. **Document after solving**: `/compound` workflow
-3. **Check health daily**: `./scripts/compound-dashboard.sh`
+3. **Check health daily**: MCP `call_tool_compound_manager` { action: "dashboard" }
 4. **Resume context**: Read `skills/session-resume/SKILL.md`
 
 ## Health Monitoring
 
 ```bash
 # Daily quick check
-./scripts/compound-dashboard.sh
+Call MCP `call_tool_compound_manager` { action: "dashboard" }
 
 # Weekly deep check
-./scripts/compound-health.sh
+Call MCP `call_tool_compound_manager` { action: "health" }
 ```
 
 **Target**: Grade B or higher
@@ -156,5 +153,4 @@ Agents should:
 
 - [Critical Patterns](../solutions/patterns/critical-patterns.md)
 - [Schema](../solutions/schema.yaml)
-- [Workflows README](../../.agent/workflows/README.md)
-- [Scripts README](../../scripts/README.md)
+- [Workflows README](../../skills/workflows/README.md)

@@ -77,15 +77,9 @@ export async function checkDocsFreshness(skipDocs: boolean = false, projectPath:
 
     const changedFiles = changedFilesStr.split('\n');
 
-    const newScripts = changedFiles.filter(f => f.startsWith('scripts/') && f !== 'scripts/README.md');
-    if (newScripts.length > 0 && !changedFiles.includes('scripts/README.md')) {
-        output += "⚠️  Scripts modified but scripts/README.md not updated.\n";
-        warnings++;
-    }
-
-    const newWorkflows = changedFiles.filter(f => f.startsWith('.agent/workflows/') && f !== '.agent/workflows/README.md');
-    if (newWorkflows.length > 0 && !changedFiles.includes('.agent/workflows/README.md')) {
-        output += "⚠️  Workflows modified but .agent/workflows/README.md not updated.\n";
+    const newWorkflows = changedFiles.filter(f => f.startsWith('skills/workflows/') && f !== 'skills/workflows/README.md');
+    if (newWorkflows.length > 0 && !changedFiles.includes('skills/workflows/README.md')) {
+        output += "⚠️  Workflows modified but skills/workflows/README.md not updated.\n";
         warnings++;
     }
 
@@ -107,7 +101,7 @@ export async function checkDocsFreshness(skipDocs: boolean = false, projectPath:
 }
 
 export async function discoverUndocumentedFolders(projectPath: string = '.'): Promise<string> {
-    const roots = ["app", "lib", "backend", "scripts", "src"];
+    const roots = ["app", "lib", "backend", "src"];
     const exclusions = ["node_modules", "__pycache__", ".git", "__tests__", "archive", ".vercel", ".next", "dist"];
     const undocumented: string[] = [];
 
@@ -150,7 +144,7 @@ export async function discoverUndocumentedFolders(projectPath: string = '.'): Pr
 }
 
 export async function validateFolderDocs(strict: boolean = false, targetFolders: string[] = [], projectPath: string = '.'): Promise<string> {
-    const coreFolders = ["src", "scripts", "docs/solutions", "docs/architecture", ".agent/workflows"];
+    const coreFolders = ["src", "docs/solutions", "docs/architecture", "skills/workflows", "agents"];
     const foldersToCheck = targetFolders.length > 0 ? targetFolders : coreFolders;
 
     let exitCode = 0;

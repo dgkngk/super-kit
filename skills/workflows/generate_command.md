@@ -27,7 +27,7 @@ When to use: {trigger conditions}
 ### Step 2: Create File
 
 ```bash
-cat > .agent/workflows/{name}.md << 'EOF'
+cat > skills/workflows/{name}.md << 'EOF'
 ---
 description: {description}
 ---
@@ -65,7 +65,7 @@ EOF
 
 ```bash
 # Check file exists
-cat .agent/workflows/{name}.md
+cat skills/workflows/{name}.md
 
 # Test invocation
 /{name}

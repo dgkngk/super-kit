@@ -135,12 +135,12 @@ async function generateSectionFile(sectionPrefix, rules, outputDir, getOutputOnl
 }
 export async function runConvertRules(projectPath = ".") {
     let report = `============================================================\n`;
-    report += `CONVERSION SCRIPT: React Best Practices -> .agent Format\n`;
+    report += `CONVERSION SCRIPT: React Best Practices -> Skills Format\n`;
     report += `============================================================\n`;
     const baseDir = path.resolve(projectPath);
     // Mimic the python logic for paths if run from anywhere, or adapt to superkit structure
     const rulesDir = path.join(baseDir, "skills", "react-best-practices", "rules");
-    const outputDir = path.join(baseDir, ".agent", "skills", "react-best-practices");
+    const outputDir = path.join(baseDir, "skills", "react-best-practices");
     report += `[*] Reading rules from: ${rulesDir}\n[*] Output to: ${outputDir}\n\n`;
     try {
         const stat = await fs.stat(rulesDir);

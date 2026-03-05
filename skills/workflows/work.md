@@ -233,8 +233,8 @@ Call MCP `call_tool_todo_manager` { action: "create", priority: "p2", title: "{d
 **Common docs to update:**
 | Change Type | Update Target |
 |-------------|---------------|
-| New script | Add to relevant README (e.g., `scripts/README.md`) |
-| New workflow | Add to `.agent/workflows/README.md` |
+| New MCP tool | Update relevant README |
+| New workflow | Add to `skills/workflows/README.md` |
 | New API endpoint | Update API documentation |
 | New component | Update component docs |
 | Config change | Update setup/installation docs |

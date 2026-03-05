@@ -2,12 +2,12 @@ import * as fs from 'fs/promises';
 import { existsSync } from 'fs';
 import * as path from 'path';
 import { spawn, execSync } from 'child_process';
-const AGENT_DIR = path.resolve('.agent');
+const AGENT_DIR = path.resolve('docs', 'agents');
 const PID_FILE = path.join(AGENT_DIR, 'preview.pid');
 const LOG_FILE = path.join(AGENT_DIR, 'preview.log');
 export async function manageAutoPreview(action, port = 3000) {
     const root = path.resolve('.');
-    // Ensure .agent dir exists
+    // Ensure docs/agents dir exists
     if (!existsSync(AGENT_DIR)) {
         await fs.mkdir(AGENT_DIR, { recursive: true });
     }

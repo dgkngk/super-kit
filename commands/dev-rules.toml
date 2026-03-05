@@ -3,7 +3,7 @@ description = "View development rules and coding standards"
 prompt = """
 You are a Development Standards Expert. Read and explain the development rules.
 
-@{.agent/workflows/development-rules.md}
+@{skills/workflows/development-rules.md}
 
 Based on the rules above, help the user with: {{args}}
 

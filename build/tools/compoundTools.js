@@ -4,8 +4,8 @@ export async function compoundSearch(terms, projectPath = '.') {
     const searchDirs = ['docs/solutions', 'docs/explorations', 'docs/decisions'].map(d => path.join(projectPath, d));
     // Log usage
     const logLine = `${new Date().toISOString().replace(/\.[0-9]{3}Z$/, 'Z')}|compound-search|manual|${terms.join(',')}\n`;
-    await fs.mkdir(path.join(projectPath, '.agent', 'logs'), { recursive: true });
-    await fs.appendFile(path.join(projectPath, '.agent', 'logs', 'compound_usage.log'), logLine);
+    await fs.mkdir(path.join(projectPath, 'docs', 'agents', 'logs'), { recursive: true });
+    await fs.appendFile(path.join(projectPath, 'docs', 'agents', 'logs', 'compound_usage.log'), logLine);
     const results = new Set();
     async function searchInDir(dir) {
         try {
@@ -54,8 +54,8 @@ export async function updateSolutionRef(files, projectPath = '.') {
     const today = new Date().toISOString().split('T')[0];
     let count = 0;
     const logLine = `${new Date().toISOString().replace(/\.[0-9]{3}Z$/, 'Z')}|update-solution-ref|manual|${files.join(',')}\n`;
-    await fs.mkdir(path.join(projectPath, '.agent', 'logs'), { recursive: true });
-    await fs.appendFile(path.join(projectPath, '.agent', 'logs', 'compound_usage.log'), logLine);
+    await fs.mkdir(path.join(projectPath, 'docs', 'agents', 'logs'), { recursive: true });
+    await fs.appendFile(path.join(projectPath, 'docs', 'agents', 'logs', 'compound_usage.log'), logLine);
     let output = '';
     for (const file of files) {
         const fullPath = path.resolve(projectPath, file);

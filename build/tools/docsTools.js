@@ -66,14 +66,9 @@ export async function checkDocsFreshness(skipDocs = false, projectPath = '.') {
     let warnings = 0;
     let output = `🔍 Checking documentation freshness for: ${commitMsg}\n`;
     const changedFiles = changedFilesStr.split('\n');
-    const newScripts = changedFiles.filter(f => f.startsWith('scripts/') && f !== 'scripts/README.md');
-    if (newScripts.length > 0 && !changedFiles.includes('scripts/README.md')) {
-        output += "⚠️  Scripts modified but scripts/README.md not updated.\n";
-        warnings++;
-    }
-    const newWorkflows = changedFiles.filter(f => f.startsWith('.agent/workflows/') && f !== '.agent/workflows/README.md');
-    if (newWorkflows.length > 0 && !changedFiles.includes('.agent/workflows/README.md')) {
-        output += "⚠️  Workflows modified but .agent/workflows/README.md not updated.\n";
+    const newWorkflows = changedFiles.filter(f => f.startsWith('skills/workflows/') && f !== 'skills/workflows/README.md');
+    if (newWorkflows.length > 0 && !changedFiles.includes('skills/workflows/README.md')) {
+        output += "⚠️  Workflows modified but skills/workflows/README.md not updated.\n";
         warnings++;
     }
     const codeChanged = changedFiles.some(f => /^(src|components|lib|app)\//.test(f));
@@ -91,7 +86,7 @@ export async function checkDocsFreshness(skipDocs = false, projectPath = '.') {
     return output;
 }
 export async function discoverUndocumentedFolders(projectPath = '.') {
-    const roots = ["app", "lib", "backend", "scripts", "src"];
+    const roots = ["app", "lib", "backend", "src"];
     const exclusions = ["node_modules", "__pycache__", ".git", "__tests__", "archive", ".vercel", ".next", "dist"];
     const undocumented = [];
     async function scanDir(dir, depth) {
@@ -132,7 +127,7 @@ export async function discoverUndocumentedFolders(projectPath = '.') {
     return "✅ All key folders have README documentation.";
 }
 export async function validateFolderDocs(strict = false, targetFolders = [], projectPath = '.') {
-    const coreFolders = ["src", "scripts", "docs/solutions", "docs/architecture", ".agent/workflows"];
+    const coreFolders = ["src", "docs/solutions", "docs/architecture", "skills/workflows", "agents"];
     const foldersToCheck = targetFolders.length > 0 ? targetFolders : coreFolders;
     let exitCode = 0;
     let output = "🔍 Validating hierarchical documentation...\n";

@@ -25,7 +25,7 @@ A pattern is promoted to this document when:
 
 ### Pattern #1: Search Before Solving
 **Problem**: Reinventing the wheel or missing existing context.
-**Solution**: Always run `./scripts/compound-search.sh` or check `docs/solutions/` before starting a new task.
+**Solution**: Always run MCP `call_tool_compound_manager` { action: "search" } or check `docs/solutions/` before starting a new task.
 **Trigger**: Starting a new `/plan` or `/work` session.
 
 ---
@@ -77,7 +77,7 @@ git push
 Relying on a static setup guide to remind agents to run a specific script.
 
 **✅ CORRECT:**
-Embed the behavioral trigger directly into the **Execution Workflow** files (`.agent/workflows/*.md`) as a mandatory "Step 0".
+Embed the behavioral trigger directly into the **Execution Workflow** files (`skills/workflows/*.md`) as a mandatory "Step 0".
 
 ---
 
@@ -132,7 +132,7 @@ Workflows must contain **Explicit Blocking Steps** (Step 0) that trigger relevan
 **Problem:** Lifecycle documents (todos, plans) can drift from their completion checkboxes when state transitions require manual steps.
 
 **✅ CORRECT:**
-Use atomic scripts (like `complete-todo.sh` or `complete-plan.sh`) that update metadata and rename files in a single operation.
+Use MCP tools (like `call_tool_todo_manager` { action: "done" } or `call_tool_arch_manager` { action: "completePlan" }) that update metadata and rename files in a single operation.
 
 ---
 
@@ -156,7 +156,7 @@ Define once, track in one place (e.g., `03-tasks.md`), and link elsewhere.
 **Problem:** Scripts and skills that do not self-report usage create blind spots.
 
 **✅ CORRECT:**
-Every tool/script must call `./scripts/log-skill.sh` or `./scripts/log-workflow.sh`.
+Every tool/skill must call MCP `call_tool_logger_manager` { action: "logSkill" } or { action: "logWorkflow" }.
 
 ---
 
@@ -253,7 +253,7 @@ Use tiered classification (Critical / Supporting / Generated) to document high-v
 **Problem:** Mandatory documentation steps are often ignored during high-velocity work.
 
 **✅ CORRECT:**
-Gate workflows with automated checks (e.g., `./scripts/validate-folder-docs.sh`) that block progress if documentation is stale.
+Gate workflows with automated checks (e.g., MCP `call_tool_docs_manager` { action: "validate" }) that block progress if documentation is stale.
 
 ---
 

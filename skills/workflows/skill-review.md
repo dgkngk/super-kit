@@ -33,12 +33,12 @@ Call MCP `call_tool_logger_manager` { action: "logSkill", name: "compound-docs",
 
 1. **Check suggestion volume:**
    ```bash
-   wc -l .agent/logs/skill_suggestions.csv
+   wc -l docs/agents/logs/skill_suggestions.csv
    ```
 
 2. **View unique suggestions:**
    ```bash
-   cut -d',' -f1 .agent/logs/skill_suggestions.csv | sort | uniq -c | sort -nr | head -20
+   cut -d',' -f1 docs/agents/logs/skill_suggestions.csv | sort | uniq -c | sort -nr | head -20
    ```
 
 3. **Identify candidates:**
@@ -78,7 +78,7 @@ If a clear gap exists:
 If it's a synonym for an existing skill:
 
 1. Add keywords to the existing `SKILL.md` description
-2. Update `.agent/workflows/README.md` to reference it
+2. Update `skills/workflows/README.md` to reference it
 
 #### Option C: Archive (Low Value)
 If it's noise or one-off:
@@ -95,10 +95,10 @@ If it's noise or one-off:
 
 ```bash
 # Append to archive
-cat .agent/logs/skill_suggestions.csv >> .agent/logs/skill_suggestions_archive.csv
+cat docs/agents/logs/skill_suggestions.csv >> docs/agents/logs/skill_suggestions_archive.csv
 
 # Clear active log
-printf "suggestion,context,count\n" > .agent/logs/skill_suggestions.csv
+printf "suggestion,context,count\n" > docs/agents/logs/skill_suggestions.csv
 ```
 
 ---

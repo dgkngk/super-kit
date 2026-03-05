@@ -15,8 +15,7 @@ skills/{skill-name}/
 ├── SKILL.md        # Router + essential principles (always loaded)
 ├── workflows/      # Step-by-step procedures
 ├── references/     # Domain knowledge
-├── templates/      # Output structures
-└── scripts/        # Reusable code
+└── templates/      # Output structures
 ```
 
 ## Workflow

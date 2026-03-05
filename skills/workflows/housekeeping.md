@@ -127,7 +127,7 @@ Check if any deprecated ADRs need review (haven't been reviewed in 6+ months):
 
 ```bash
 // turbo
-./scripts/check-deprecated-adrs.sh
+Call MCP `call_tool_compound_manager` { action: "validate" }
 ```
 
 - If warnings appear, review the deprecated ADR to see if it can be archived or needs an update.
@@ -140,7 +140,7 @@ Prevent log files from growing indefinitely:
 ```bash
 # Rotate logs older than 12 weeks
 // turbo
-./scripts/rotate-logs.sh
+Call MCP `call_tool_logger_manager` { action: "rotateLogs" }
 ```
 
 ### Step 3.8: Documentation Freshness Check
@@ -155,7 +155,7 @@ Call MCP `call_tool_docs_manager` { action: "freshness" }
 **The script checks:**
 - [ ] Files changed in last commit have corresponding doc updates
 - [ ] New scripts are mentioned in README files
-- [ ] New workflows are indexed in `.agent/workflows/README.md`
+- [ ] New workflows are indexed in `skills/workflows/README.md`
 
 **If warnings appear:** Update docs before pushing.
 

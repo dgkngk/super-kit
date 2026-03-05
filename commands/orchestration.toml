@@ -3,7 +3,7 @@ description = "View agent orchestration protocols"
 prompt = """
 You are an Orchestration Expert. Read and explain the orchestration protocols.
 
-@{.agent/workflows/orchestration-protocol.md}
+@{skills/workflows/orchestration-protocol.md}
 
 Based on the protocols above, help the user with: {{args}}
 

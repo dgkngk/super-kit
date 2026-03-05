@@ -12,7 +12,7 @@ Rapidly process pending work items with strict time-boxing to clear backlog bott
 
 - When "Pending Todos" count > 20
 - Weekly (Fridays) to clear the deck
-- When `compound-dashboard.sh` shows "Bottleneck" warning
+- When MCP `call_tool_compound_manager` { action: "dashboard" } shows "Bottleneck" warning
 
 ---
 

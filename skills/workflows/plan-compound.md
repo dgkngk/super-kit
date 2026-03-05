@@ -53,9 +53,9 @@ Copy the **table** AND the **update command** from the script output into your p
 
 Before proceeding to Step 0.5, confirm:
 
-- [ ] Ran `compound-search.sh` with relevant keywords?
+- [ ] Ran MCP `call_tool_compound_manager` { action: "search" } with relevant keywords?
 - [ ] Reviewed all matching solutions (or confirmed none found)?
-- [ ] Ran `update-solution-ref.sh` if reusing any solution?
+- [ ] Ran MCP `call_tool_compound_manager` { action: "updateRef" } if reusing any solution?
 
 **If any box is unchecked:** Complete it now. Do NOT proceed.
 

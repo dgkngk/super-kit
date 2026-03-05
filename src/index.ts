@@ -312,7 +312,23 @@ server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
     try {
         const content = await fs.readFile(safePath, "utf-8");
         const parsed = toml.parse(content) as any;
-        const promptText = parsed?.prompt || `Execute the ${promptName} command.`;
+        let promptText = parsed?.prompt || `Execute the ${promptName} command.`;
+
+        // Resolve @{path} includes from super-kit package root
+        const includePattern = /@\{([^}]+)\}/g;
+        let match;
+        while ((match = includePattern.exec(promptText)) !== null) {
+            const includePath = match[1];
+            const resolvedPath = getSafePath(superKitRoot, includePath);
+            if (resolvedPath) {
+                try {
+                    const includeContent = await fs.readFile(resolvedPath, "utf-8");
+                    promptText = promptText.replace(match[0], includeContent);
+                } catch {
+                    promptText = promptText.replace(match[0], `[File not found: ${includePath}]`);
+                }
+            }
+        }
 
         // Load SUPERKIT.md for systematic inclusion
         const superKitPath = path.join(superKitRoot, "SUPERKIT.md");

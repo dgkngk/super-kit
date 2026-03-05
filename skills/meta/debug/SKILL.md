@@ -34,7 +34,7 @@ Call MCP `call_tool_logger_manager` { action: "logSkill", name: "debug", outcome
 
 > **"If you haven't reproduced it, you haven't fixed it."**
 
-Always implement a reproduction case (test or script) BEFORE attempting a fix. Highly recommended to use the template at `docs/templates/repro-script-template.sh` and store artifacts in `scripts/repro/`.
+Always implement a reproduction case (test or script) BEFORE attempting a fix. Create a minimal reproduction test case that triggers the issue.
 
 > [!NOTE]
-> No top-level `debug/` folder exists. Use `skills/debug/` for guidance and `scripts/repro/` for artifacts.
+> No top-level `debug/` folder exists. Use `skills/debug/` for guidance.

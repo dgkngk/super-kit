@@ -93,4 +93,4 @@ Consider running this skill when you see:
 - Todos: `todos/`
 - Plans: `plans/`
 - Solutions: `docs/solutions/`
-- Workflows: `.agent/workflows/`
+- Workflows: `skills/workflows/`

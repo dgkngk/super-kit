@@ -23,7 +23,7 @@ describe('Logger Tools', () => {
         const result = await logSkill('test-skill', 'manual', 'context', tempDir);
         expect(result).toBe('Successfully logged skill usage for test-skill');
 
-        const logFile = path.join(tempDir, '.agent', 'logs', 'skill_usage.log');
+        const logFile = path.join(tempDir, 'docs', 'agents', 'logs', 'skill_usage.log');
         const content = await fs.readFile(logFile, 'utf-8');
         expect(content).toContain('2026-03-04T00:00:00Z|test-skill|manual|context\n');
 
@@ -37,7 +37,7 @@ describe('Logger Tools', () => {
         const result = await logWorkflow('test-workflow', 'session-123', tempDir);
         expect(result).toBe('Successfully logged workflow usage for test-workflow');
 
-        const logFile = path.join(tempDir, '.agent', 'logs', 'workflow_usage.log');
+        const logFile = path.join(tempDir, 'docs', 'agents', 'logs', 'workflow_usage.log');
         const content = await fs.readFile(logFile, 'utf-8');
         expect(content).toContain('2026-03-04T00:00:00Z|test-workflow|session-123\n');
 
@@ -50,7 +50,7 @@ describe('Logger Tools', () => {
 
         await logWorkflow('test-workflow', '', tempDir);
 
-        const logFile = path.join(tempDir, '.agent', 'logs', 'workflow_usage.log');
+        const logFile = path.join(tempDir, 'docs', 'agents', 'logs', 'workflow_usage.log');
         const content = await fs.readFile(logFile, 'utf-8');
         expect(content).toContain('2026-03-04T00:00:00Z|test-workflow|1772582400\n');
 
@@ -58,7 +58,7 @@ describe('Logger Tools', () => {
     });
 
     it('should rotate logs older than retention days', async () => {
-        const logDir = path.join(tempDir, '.agent', 'logs');
+        const logDir = path.join(tempDir, 'docs', 'agents', 'logs');
         await fs.mkdir(logDir, { recursive: true });
 
         // Old log line (e.g. 100 days old)
@@ -83,7 +83,7 @@ describe('Logger Tools', () => {
     });
 
     it('should report if no logs need rotation', async () => {
-        const logDir = path.join(tempDir, '.agent', 'logs');
+        const logDir = path.join(tempDir, 'docs', 'agents', 'logs');
         await fs.mkdir(logDir, { recursive: true });
 
         const newTimestamp = new Date();

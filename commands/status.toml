@@ -5,7 +5,7 @@ prompt = """
 
 Loading status...
 
-{{shell ./scripts/status-dashboard.sh}}
+Call MCP `call_tool_session_manager` { command: "status" }
 
 ---
 
@@ -16,7 +16,7 @@ Loading status...
 | View specs details | `ls docs/specs/` |
 | View plans details | `ls plans/` |
 | View todos details | `ls todos/` |
-| Compound health | `./scripts/compound-dashboard.sh` |
+| Compound health | `Call MCP call_tool_compound_manager { action: "dashboard" }` |
 | Housekeeping | `/housekeeping` |
 
 What do you need to do next?

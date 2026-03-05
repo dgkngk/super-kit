@@ -145,10 +145,11 @@ Is it actively exploited (EPSS >0.5)?
 
 ## Validation
 
-After your review, run the validation script:
+After your review, validate with project-specific checks:
 
 ```bash
-python scripts/security_scan.py <project_path> --output summary
+# Use your project's linting/security tools (e.g., npm audit, semgrep, bandit)
+npm audit --production
 ```
 
 This validates that security principles were correctly applied.

@@ -12,9 +12,9 @@ Try to strip away all unnecessary complexity.
 - Create a test case in a relevant `.test.tsx` file that mimics the user interaction.
 
 **Backend:**
-- Create a script in `scripts/repro/` that triggers the API call.
+- Create a test case or a minimal script that triggers the API call.
 
-## 3. Scripts
-Use these scripts to help:
-- `./scripts/push-env.sh` (Sync environment variables)
+## 3. Tools
+Use these to help:
 - `npm run test` (Run unit tests)
+- MCP `call_tool_compound_manager` { action: "search", terms: ["error message keywords"] } (Search for known solutions)

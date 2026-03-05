@@ -177,7 +177,7 @@ Guide to using workflows in Super-Kit.
 
 ## Tips
 
-1. **Always search first** - `./scripts/compound-search.sh`
+1. **Always search first** - MCP `call_tool_compound_manager` { action: "search" }
 2. **Plan before code** - No improvisation
 3. **Test continuously** - Don't wait until the end
 4. **Document solutions** - `/compound` after fixing bug

@@ -102,28 +102,15 @@ export async function validateArchitecture(projectPath = '.') {
     };
     const expSkills = getExpected('skills');
     const expWorkflows = getExpected('workflows');
-    const expScripts = getExpected('scripts');
     const expPatterns = getExpected('patterns');
-    let actSkills = 0, actWorkflows = 0, actScripts = 0, actPatterns = 0;
+    let actSkills = 0, actWorkflows = 0, actPatterns = 0;
     try {
         actSkills = (await fs.readdir(path.join(projectPath, 'skills'))).length;
     }
     catch { }
     try {
-        const wfs = await fs.readdir(path.join(projectPath, '.agent/workflows'));
+        const wfs = await fs.readdir(path.join(projectPath, 'skills', 'workflows'));
         actWorkflows = wfs.filter(f => f.endsWith('.md') && f !== 'README.md').length;
-    }
-    catch {
-        // Fallback to workflows/
-        try {
-            const wfs = await fs.readdir(path.join(projectPath, 'workflows'));
-            actWorkflows = wfs.filter(f => f.endsWith('.md') && f !== 'README.md').length;
-        }
-        catch { }
-    }
-    try {
-        const scripts = await fs.readdir(path.join(projectPath, 'scripts'));
-        actScripts = scripts.filter(f => f.endsWith('.sh') || f.endsWith('.js') || f.endsWith('.ts')).length;
     }
     catch { }
     try {
@@ -139,10 +126,6 @@ export async function validateArchitecture(projectPath = '.') {
     }
     if (actWorkflows !== expWorkflows) {
         out += `❌ Workflows mismatch: Doc says ${expWorkflows}, Found ${actWorkflows}\n`;
-        fail = true;
-    }
-    if (actScripts !== expScripts) {
-        out += `❌ Scripts mismatch: Doc says ${expScripts}, Found ${actScripts}\n`;
         fail = true;
     }
     if (actPatterns !== expPatterns) {

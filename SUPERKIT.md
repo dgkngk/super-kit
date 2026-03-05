@@ -125,7 +125,7 @@ cat skills/session-resume/SKILL.md
 
 **BEFORE** solving a new problem:
 ```bash
-./scripts/compound-search.sh "{keywords}"
+Call MCP `call_tool_compound_manager` { action: "search", terms: ["{keywords}"] }
 ```
 
 If solution found → Apply it, do not reinvent the wheel!
@@ -145,7 +145,7 @@ If solution found → Apply it, do not reinvent the wheel!
 
 Run daily:
 ```bash
-./scripts/compound-dashboard.sh
+Call MCP `call_tool_compound_manager` { action: "dashboard" }
 ```
 **Target**: Grade B or higher
 

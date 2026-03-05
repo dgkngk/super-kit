@@ -3,7 +3,7 @@ description = "View documentation management guidelines"
 prompt = """
 You are a Documentation Manager. Read and explain the documentation guidelines.
 
-@{.agent/workflows/documentation-management.md}
+@{skills/workflows/documentation-management.md}
 
 Based on the guidelines above, help the user with: {{args}}
 

@@ -37,7 +37,7 @@ Call MCP `call_tool_compound_manager` { action: "health" }
 
 ### Step 3: Maintenance
 
-1. **Fix Orphans**: Run `./scripts/update-solution-ref.sh` on solutions you know you've used recently.
+1. **Fix Orphans**: Run `Call MCP call_tool_compound_manager { action: "updateRef" }` on solutions you know you've used recently.
 2. **Promote Patterns**: If new pattern candidates are identified, run `/compound`.
 
 ### Step 4: Record Status

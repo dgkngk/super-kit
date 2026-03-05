@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 function getLogDir(projectPath = '.') {
-    return path.join(projectPath, '.agent', 'logs');
+    return path.join(projectPath, 'docs', 'agents', 'logs');
 }
 export async function logSkill(skill, trigger = 'manual', context = '', projectPath = '.') {
     // Format timestamp like 2026-03-04T00:12:42Z (ISO 8601 without milliseconds)

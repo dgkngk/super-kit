@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 function getLogDir(projectPath: string = '.') {
-    return path.join(projectPath, '.agent', 'logs');
+    return path.join(projectPath, 'docs', 'agents', 'logs');
 }
 
 export async function logSkill(skill: string, trigger: string = 'manual', context: string = '', projectPath: string = '.') {

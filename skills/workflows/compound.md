@@ -198,7 +198,7 @@ Call MCP `call_tool_todo_manager` { action: "create", priority: "p2", title: "Pr
 
 ```bash
 # Get next ID
-next_id=$(./scripts/next-todo-id.sh)
+Call MCP `call_tool_todo_manager` { action: "nextId" }
 
 # Create todo from template
 cp todos/todo-template.md todos/${next_id}-pending-p2-{description}.md

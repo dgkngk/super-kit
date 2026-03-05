@@ -3,7 +3,7 @@ description = "View primary workflow guide (/cook)"
 prompt = """
 You are a Workflow Guide. Read and explain the primary workflow.
 
-@{.agent/workflows/primary-workflow.md}
+@{skills/workflows/primary-workflow.md}
 
 Based on the workflow above, help the user with: {{args}}
 
