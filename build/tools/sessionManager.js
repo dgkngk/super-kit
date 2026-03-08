@@ -4,11 +4,18 @@ export async function manageSession(command, rootPath = '.') {
     const root = path.resolve(rootPath);
     const pkgPath = path.join(root, 'package.json');
     const getPackageInfo = async () => {
+        let name = root.split(path.sep).pop() || 'unnamed';
+        let version = '0.0.0';
+        const stack = [];
+        let scripts = [];
+        // 1. Node.js Check
         try {
             const data = await fs.readFile(pkgPath, 'utf8');
             const pkg = JSON.parse(data);
+            name = pkg.name || name;
+            version = pkg.version || version;
+            scripts = Object.keys(pkg.scripts || {});
             const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
-            const stack = [];
             if (allDeps['next'])
                 stack.push("Next.js");
             else if (allDeps['react'])
@@ -27,16 +34,69 @@ export async function manageSession(command, rootPath = '.') {
                 stack.push("Prisma");
             if (allDeps['typescript'])
                 stack.push("TypeScript");
-            return {
-                name: pkg.name || 'unnamed',
-                version: pkg.version || '0.0.0',
-                stack,
-                scripts: Object.keys(pkg.scripts || {})
-            };
+            if (stack.length === 0)
+                stack.push("Node.js");
         }
-        catch (e) {
-            return { name: root.split(path.sep).pop() || 'unnamed', version: '0.0.0', stack: ['Generic'], scripts: [] };
+        catch { }
+        // 2. Polyglot Checks
+        try {
+            const files = await fs.readdir(root);
+            // Python
+            if (files.includes('requirements.txt') || files.includes('Pipfile') || files.includes('pyproject.toml')) {
+                if (!stack.includes("Python"))
+                    stack.push("Python");
+                if (files.includes('manage.py'))
+                    stack.push("Django");
+                if (files.includes('requirements.txt')) {
+                    const content = await fs.readFile(path.join(root, 'requirements.txt'), 'utf8');
+                    if (content.includes('flask'))
+                        stack.push("Flask");
+                    if (content.includes('fastapi'))
+                        stack.push("FastAPI");
+                    if (content.includes('django') && !stack.includes("Django"))
+                        stack.push("Django");
+                }
+            }
+            // Go
+            if (files.includes('go.mod'))
+                stack.push("Go");
+            // Rust
+            if (files.includes('Cargo.toml'))
+                stack.push("Rust");
+            // Java / Kotlin
+            if (files.includes('pom.xml'))
+                stack.push("Java (Maven)");
+            if (files.includes('build.gradle') || files.includes('build.gradle.kts'))
+                stack.push("Java/Kotlin (Gradle)");
+            // PHP
+            if (files.includes('composer.json')) {
+                if (!stack.includes("PHP"))
+                    stack.push("PHP");
+                try {
+                    const composer = JSON.parse(await fs.readFile(path.join(root, 'composer.json'), 'utf8'));
+                    const deps = { ...(composer.require || {}), ...(composer['require-dev'] || {}) };
+                    if (deps['laravel/framework'])
+                        stack.push("Laravel");
+                    if (deps['symfony/framework-bundle'])
+                        stack.push("Symfony");
+                }
+                catch { }
+            }
+            // Infrastructure
+            if (files.includes('Dockerfile') || files.includes('docker-compose.yml'))
+                stack.push("Docker");
+            if (files.some(f => f.endsWith('.tf')))
+                stack.push("Terraform");
         }
+        catch { }
+        if (stack.length === 0)
+            stack.push("Generic");
+        return {
+            name,
+            version,
+            stack: Array.from(new Set(stack)),
+            scripts
+        };
     };
     const countFiles = async (dir) => {
         let count = 0;
@@ -91,7 +151,16 @@ export async function manageSession(command, rootPath = '.') {
         output += `📁 Project: ${info.name}\n`;
         output += `📂 Path: ${root}\n`;
         output += `🏷️  Type: ${info.stack.join(', ')}\n`;
-        output += `📊 Status: Active\n\n`;
+        // Check for active todos to determine status
+        let status = 'Idle';
+        try {
+            const todos = await fs.readdir(path.join(root, 'todos'));
+            const hasActive = todos.some(f => f.endsWith('.md') && !f.includes('template') && !f.includes('archive'));
+            if (hasActive)
+                status = 'Active';
+        }
+        catch { }
+        output += `📊 Status: ${status}\n\n`;
         output += `🔧 Tech Stack:\n`;
         for (const tech of info.stack)
             output += `   • ${tech}\n`;
