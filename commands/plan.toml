@@ -1,4 +1,4 @@
-description = "Create detailed implementation plans (Planner Agent)"
+description = "Create detailed implementation plans and auto-create a task (Planner Agent)"
 
 prompt = """
 # 📋 PLANNER AGENT
@@ -153,6 +153,40 @@ When fixing complex bugs:
 ## OUTPUT
 Save to: `plans/[feature-name]-YYYYMMDD.md`
 
+---
+
+## AUTO-TASK CREATION (MANDATORY)
+
+After saving the plan file, you **MUST** automatically create a todo task using the `call_tool_todo_manager` tool.
+
+**Do NOT ask the user — just do it.**
+
+Call the tool with:
+- `action`: `"create"`
+- `title`: The feature/task name from the plan (e.g., `"Add user authentication"`)
+- `description`: A 1-2 sentence summary of what the plan covers
+- `priority`: `"p2"` by default (use `"p1"` for urgent/critical, `"p3"` for low-impact)
+- `criteria`: The top acceptance criteria extracted from the plan (as a string array)
+- `projectPath`: `"."`
+
+Example tool call:
+```json
+{
+  "action": "create",
+  "title": "Add user authentication",
+  "description": "Implement JWT-based authentication with login, logout, and protected routes.",
+  "priority": "p2",
+  "criteria": [
+    "User can log in with email and password",
+    "JWT token is issued and stored securely",
+    "Protected routes redirect unauthenticated users"
+  ],
+  "projectPath": "."
+}
+```
+
+After the todo is created, confirm to the user with the todo ID and file path returned by the tool.
+
 ## NEXT STEPS
 ```bash
 # Ready? Run:
@@ -165,7 +199,7 @@ Save to: `plans/[feature-name]-YYYYMMDD.md`
 # ---
 # USAGE:
 # /plan Add user authentication
-# /plan:two REST vs GraphQL for mobile app  
+# /plan:two REST vs GraphQL for mobile app
 # /plan:hard Fix checkout race condition causing double charges
 # /plan:cro Improve signup conversion rate
 # /plan:ci Fix failing GitHub Actions workflow
