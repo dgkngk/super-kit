@@ -56,6 +56,14 @@ import {
   syncSpec,
   updateSpecPhase,
 } from "./tools/archTools.js";
+import {
+  list_project_agents,
+  list_project_skills,
+  list_project_workflows,
+  load_project_agent_file,
+  load_project_skill_file,
+  load_project_workflow_file,
+} from "./tools/ProjectAssets.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const superKitRoot = path.resolve(__dirname, "../");
@@ -291,8 +299,101 @@ const TOOLS: Tool[] = [
       "Lists all available agents, skills, and workflows in the Super-Kit repository.",
     inputSchema: {
       type: "object",
-      properties: {},
+      properties: {
+        scope: {
+          type: "string",
+          enum: ["global", "project", "all"],
+          default: "global",
+          description:
+            "Which scope to list: 'global' (superkit package assets), 'project' (.agents/ folder assets), or 'all' (merged with source labels on every entry).",
+        },
+        projectPath: {
+          type: "string",
+          description:
+            "Project root path used when scope includes 'project'. Defaults to process.cwd().",
+        },
+      },
       required: [],
+    },
+  },
+  {
+    name: "list_project_assets",
+    description:
+      "Lists project-scoped agents, skills, and workflows from the .agents/ folder in the given project directory. Falls back to process.cwd() if no projectPath is given.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        projectPath: {
+          type: "string",
+          description:
+            "Absolute path to the project root. Defaults to process.cwd().",
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: "load_project_agent",
+    description:
+      "Loads a project-scoped agent markdown file from {projectPath}/.agents/agents/{agentName}.md",
+    inputSchema: {
+      type: "object",
+      properties: {
+        agentName: {
+          type: "string",
+          description: "Agent name without .md extension.",
+        },
+        projectPath: {
+          type: "string",
+          description:
+            "Absolute path to the project root. Defaults to process.cwd().",
+        },
+      },
+      required: ["agentName"],
+    },
+  },
+  {
+    name: "load_project_skill",
+    description:
+      "Loads a project-scoped skill's SKILL.md from {projectPath}/.agents/skills/{category}/{skillName}/SKILL.md",
+    inputSchema: {
+      type: "object",
+      properties: {
+        category: {
+          type: "string",
+          description: "Skill category: 'tech' or 'meta'.",
+        },
+        skillName: {
+          type: "string",
+          description: "Skill directory name.",
+        },
+        projectPath: {
+          type: "string",
+          description:
+            "Absolute path to the project root. Defaults to process.cwd().",
+        },
+      },
+      required: ["category", "skillName"],
+    },
+  },
+  {
+    name: "load_project_workflow",
+    description:
+      "Loads a project-scoped workflow markdown file from {projectPath}/.agents/workflows/{workflowName}.md",
+    inputSchema: {
+      type: "object",
+      properties: {
+        workflowName: {
+          type: "string",
+          description: "Workflow name without .md extension.",
+        },
+        projectPath: {
+          type: "string",
+          description:
+            "Absolute path to the project root. Defaults to process.cwd().",
+        },
+      },
+      required: ["workflowName"],
     },
   },
   {
@@ -606,35 +707,111 @@ server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
     }
 
     if (request.params.name === "list_superkit_assets") {
+      const args = request.params.arguments as
+        | { scope?: string; projectPath?: string }
+        | undefined;
+      const scope = args?.scope ?? "global";
+      const projectPath = args?.projectPath;
+
       const agentsPath = path.join(superKitRoot, "agents");
       const skillsTechPath = path.join(superKitRoot, "skills", "tech");
       const skillsMetaPath = path.join(superKitRoot, "skills", "meta");
       const workflowsPath = path.join(superKitRoot, "skills", "workflows");
       const commandsPath = path.join(superKitRoot, "commands");
 
-      const agents = await listDirectorySafe(agentsPath);
-      const techSkills = await listDirectorySafe(skillsTechPath);
-      const metaSkills = await listDirectorySafe(skillsMetaPath);
-      const workflows = await listDirectorySafe(workflowsPath);
-      const commands = await listDirectorySafe(commandsPath);
+      // Build global asset lists (used for scope "global" or "all")
+      let globalData: object | null = null;
+      if (scope !== "project") {
+        const agents = await listDirectorySafe(agentsPath);
+        const techSkills = await listDirectorySafe(skillsTechPath);
+        const metaSkills = await listDirectorySafe(skillsMetaPath);
+        const workflows = await listDirectorySafe(workflowsPath);
+        const commands = await listDirectorySafe(commandsPath);
+
+        if (scope === "global") {
+          // Original backward-compatible format — no source labels
+          globalData = {
+            agents: agents.map((a) => a.replace(".md", "")),
+            skills: {
+              tech: techSkills.map((s) => s.replace("/", "")),
+              meta: metaSkills.map((s) => s.replace("/", "")),
+            },
+            workflows: workflows.map((w) => w.replace(".md", "")),
+            commands: commands.map((c) => c.replace(".toml", "")),
+          };
+        } else {
+          // "all" scope — include source labels on every entry
+          globalData = {
+            agents: agents.map((a) => ({
+              name: a.replace(".md", ""),
+              source: "global",
+            })),
+            skills: {
+              tech: techSkills.map((s) => ({
+                name: s.replace("/", ""),
+                source: "global",
+              })),
+              meta: metaSkills.map((s) => ({
+                name: s.replace("/", ""),
+                source: "global",
+              })),
+            },
+            workflows: workflows.map((w) => ({
+              name: w.replace(".md", ""),
+              source: "global",
+            })),
+            commands: commands.map((c) => ({
+              name: c.replace(".toml", ""),
+              source: "global",
+            })),
+          };
+        }
+      }
+
+      // Build project asset lists (used for scope "project" or "all")
+      let projectData: object | null = null;
+      if (scope !== "global") {
+        const [projAgents, projSkills, projWorkflows] = await Promise.all([
+          list_project_agents(projectPath),
+          list_project_skills(projectPath),
+          list_project_workflows(projectPath),
+        ]);
+        projectData = {
+          agents: projAgents.map((a) => ({ name: a, source: "project" })),
+          skills: {
+            tech: projSkills.tech.map((s) => ({ name: s, source: "project" })),
+            meta: projSkills.meta.map((s) => ({ name: s, source: "project" })),
+          },
+          workflows: projWorkflows.map((w) => ({ name: w, source: "project" })),
+        };
+      }
+
+      // Compose the final response payload
+      let payload: object;
+      if (scope === "global") {
+        payload = globalData!;
+      } else if (scope === "project") {
+        payload = projectData!;
+      } else {
+        // "all" — deep-merge both lists
+        const g = globalData as any;
+        const p = projectData as any;
+        payload = {
+          agents: [...g.agents, ...p.agents],
+          skills: {
+            tech: [...g.skills.tech, ...p.skills.tech],
+            meta: [...g.skills.meta, ...p.skills.meta],
+          },
+          workflows: [...g.workflows, ...p.workflows],
+          commands: g.commands,
+        };
+      }
 
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(
-              {
-                agents: agents.map((a) => a.replace(".md", "")),
-                skills: {
-                  tech: techSkills.map((s) => s.replace("/", "")),
-                  meta: metaSkills.map((s) => s.replace("/", "")),
-                },
-                workflows: workflows.map((w) => w.replace(".md", "")),
-                commands: commands.map((c) => c.replace(".toml", "")),
-              },
-              null,
-              2,
-            ),
+            text: JSON.stringify(payload, null, 2),
           },
         ],
       };
@@ -710,6 +887,94 @@ server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
       if (!safePath) throw new Error("Invalid workflow path");
 
       const content = await fs.readFile(safePath, "utf-8");
+      return { content: [{ type: "text", text: content }] };
+    }
+
+    if (request.params.name === "list_project_assets") {
+      const args = request.params.arguments as
+        | { projectPath?: string }
+        | undefined;
+      const projectPath = args?.projectPath;
+
+      const [agents, skills, workflows] = await Promise.all([
+        list_project_agents(projectPath),
+        list_project_skills(projectPath),
+        list_project_workflows(projectPath),
+      ]);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(
+              {
+                source: "project",
+                agents: agents.map((a) => ({ name: a, source: "project" })),
+                skills: {
+                  tech: skills.tech.map((s) => ({
+                    name: s,
+                    source: "project",
+                  })),
+                  meta: skills.meta.map((s) => ({
+                    name: s,
+                    source: "project",
+                  })),
+                },
+                workflows: workflows.map((w) => ({
+                  name: w,
+                  source: "project",
+                })),
+              },
+              null,
+              2,
+            ),
+          },
+        ],
+      };
+    }
+
+    if (request.params.name === "load_project_agent") {
+      const args = request.params.arguments as {
+        agentName: string;
+        projectPath?: string;
+      };
+      if (!args.agentName) throw new Error("Missing agentName");
+
+      const content = await load_project_agent_file(
+        args.agentName,
+        args.projectPath,
+      );
+      return { content: [{ type: "text", text: content }] };
+    }
+
+    if (request.params.name === "load_project_skill") {
+      const args = request.params.arguments as {
+        category: string;
+        skillName: string;
+        projectPath?: string;
+      };
+      if (!args.category || !args.skillName)
+        throw new Error("Missing category or skillName");
+
+      const content = await load_project_skill_file(
+        args.category,
+        args.skillName,
+        args.projectPath,
+      );
+      return { content: [{ type: "text", text: content }] };
+    }
+
+    if (request.params.name === "load_project_workflow") {
+      const args = request.params.arguments as {
+        workflowName: string;
+        projectPath?: string;
+      };
+      if (!args.workflowName) throw new Error("Missing workflowName");
+
+      const content = await load_project_workflow_file(
+        args.workflowName,
+        args.projectPath,
+      );
       return { content: [{ type: "text", text: content }] };
     }
 

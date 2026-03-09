@@ -85,11 +85,17 @@ When user says: "Always use TypeScript strict mode"
 
 ## Available Tools
 
-**Super-Kit MCP Tools:**
-- `list_superkit_assets` - Lists all available agents, skills, and workflows.
+**Super-Kit MCP Tools (Global Scope):**
+- `list_superkit_assets` - Lists all available agents, skills, and workflows. Accepts optional `scope` (`"global"` | `"project"` | `"all"`) and `projectPath` params.
 - `load_superkit_agent` - Loads Markdown instructions for an agent (e.g., `data-engineer`).
 - `load_superkit_skill` - Loads Markdown instructions for a skill (e.g., `tech`, `api-patterns`).
 - `load_superkit_workflow` - Loads a workflow guide (e.g., `work`, `explore`).
+
+**Project-Scoped MCP Tools:**
+- `list_project_assets` - Lists project-scoped agents, skills, and workflows from the `.agents/` folder.
+- `load_project_agent` - Loads a project-scoped agent from `{projectPath}/.agents/agents/`.
+- `load_project_skill` - Loads a project-scoped skill's `SKILL.md` from `{projectPath}/.agents/skills/`.
+- `load_project_workflow` - Loads a project-scoped workflow from `{projectPath}/.agents/workflows/`.
 
 **Core Development Tools:**
 - `kit_create_checkpoint` - Create checkpoint before changes
@@ -102,6 +108,30 @@ When user says: "Always use TypeScript strict mode"
 **Learning:**
 - `kit_save_learning` - **Save lesson from user feedback**
 - `kit_get_learnings` - Read saved learnings
+
+## 🗂️ Project-Based Assets
+
+Any project can define its own agents, skills, and workflows by creating a `.agents/` folder at the project root:
+
+```
+{project-root}/
+└── .agents/
+    ├── agents/       # Custom agent .md files (e.g., my-domain-expert.md)
+    ├── skills/
+    │   ├── tech/     # Tech skill dirs, each containing a SKILL.md
+    │   └── meta/     # Meta skill dirs, each containing a SKILL.md
+    └── workflows/    # Custom workflow .md files (e.g., deploy-staging.md)
+```
+
+**Resolution rules:**
+- Project assets have `"source": "project"` and **complement** (do not replace) global Super-Kit assets.
+- Global Super-Kit assets always have `"source": "global"`.
+- If `.agents/` does not exist, all project-scoped tools return empty results gracefully — no errors.
+
+**When starting work on ANY project, ALWAYS:**
+1. Call `list_project_assets` (or `list_superkit_assets` with `scope: "all"`) to discover project-specific agents, skills, and workflows.
+2. Load project assets with `load_project_agent`, `load_project_skill`, or `load_project_workflow` before falling back to global equivalents.
+3. Use global assets (`load_superkit_agent`, etc.) for anything not covered by the project's `.agents/` folder.
 
 ## Documentation Management
 
