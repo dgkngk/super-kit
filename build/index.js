@@ -302,6 +302,13 @@ server.setRequestHandler(ListPromptsRequestSchema, async () => {
                     prompts.push({
                         name: file.replace(".toml", ""),
                         description: description,
+                        arguments: [
+                            {
+                                name: "args",
+                                description: "Arguments to pass to the command",
+                                required: false,
+                            },
+                        ],
                     });
                 }
                 catch (e) {
@@ -316,8 +323,18 @@ server.setRequestHandler(ListPromptsRequestSchema, async () => {
         return { prompts: [] };
     }
 });
+export function apply_prompt_args(promptText, userArgs) {
+    // Substitute {{#if args}} ... {{else}} ... {{/if}} Handlebars blocks
+    promptText = promptText.replace(/\{\{#if args\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, (_, ifBlock, elseBlock) => userArgs.trim() ? ifBlock : elseBlock);
+    // Substitute {{#if args}} ... {{/if}} blocks (no else branch)
+    promptText = promptText.replace(/\{\{#if args\}\}([\s\S]*?)\{\{\/if\}\}/g, (_, ifBlock) => (userArgs.trim() ? ifBlock : ""));
+    // Substitute all {{args}} occurrences with the actual user-provided args
+    promptText = promptText.replace(/\{\{args\}\}/g, userArgs);
+    return promptText;
+}
 server.setRequestHandler(GetPromptRequestSchema, async (request) => {
     const promptName = request.params.name;
+    const userArgs = request.params.arguments?.args ?? "";
     const commandFile = `${promptName}.toml`;
     const basePath = path.join(superKitRoot, "commands");
     const safePath = getSafePath(basePath, commandFile);
@@ -328,6 +345,7 @@ server.setRequestHandler(GetPromptRequestSchema, async (request) => {
         const content = await fs.readFile(safePath, "utf-8");
         const parsed = toml.parse(content);
         let promptText = parsed?.prompt || `Execute the ${promptName} command.`;
+        promptText = apply_prompt_args(promptText, userArgs);
         // Resolve @{path} includes from super-kit package root
         const includePattern = /@\{([^}]+)\}/g;
         let match;
