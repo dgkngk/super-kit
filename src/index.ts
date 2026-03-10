@@ -180,7 +180,23 @@ const TOOLS: Tool[] = [
   },
   {
     name: "call_tool_todo_manager",
-    description: "Manages todos (nextId, create, start, done, complete)",
+    description: `Manages todos. Per-action usage:
+
+• nextId — Returns the next available todo ID. No extra params needed.
+
+• create — Creates a new todo file. Required: title (string), description (1-2 sentence problem statement), priority ("p0"|"p1"|"p2"|"p3"), criteria (string array of acceptance criteria). Optional: projectPath.
+  Example: { action: "create", title: "Add auth", description: "Implement JWT login.", priority: "p2", criteria: ["User can log in", "Token is stored"], projectPath: "." }
+
+• start — Marks a todo as in-progress. Required: todoId = RELATIVE PATH to the todo file, e.g. "todos/001-pending-p2-my-task.md". The file must exist at that path relative to projectPath.
+  Example: { action: "start", todoId: "todos/001-pending-p2-my-task.md", projectPath: "." }
+
+• done — Marks a todo as done. Required: todoId = relative path (same format as start). All acceptance criteria checkboxes must be checked, or pass force: true to bypass.
+  Example: { action: "done", todoId: "todos/001-in-progress-p2-my-task.md", force: true, projectPath: "." }
+
+• complete — Marks a todo as complete (final state). Required: todoId = relative path (same format as start/done).
+  Example: { action: "complete", todoId: "todos/001-done-p2-my-task.md", force: true, projectPath: "." }
+
+⚠️ IMPORTANT: todoId must be the FULL RELATIVE FILE PATH (e.g. "todos/001-in-progress-p2-my-task.md"), NOT just the numeric ID ("001"). The filename changes with each status transition, so always use the current filename on disk.`,
     inputSchema: {
       type: "object",
       properties: {
@@ -188,12 +204,36 @@ const TOOLS: Tool[] = [
           type: "string",
           enum: ["nextId", "create", "start", "done", "complete"],
         },
-        title: { type: "string" },
-        description: { type: "string" },
-        priority: { type: "string" },
-        criteria: { type: "array", items: { type: "string" } },
-        todoId: { type: "string" },
-        force: { type: "boolean", default: false },
+        title: {
+          type: "string",
+          description: "Todo title. Used by: create.",
+        },
+        description: {
+          type: "string",
+          description: "1-2 sentence problem statement. Used by: create.",
+        },
+        priority: {
+          type: "string",
+          enum: ["p0", "p1", "p2", "p3"],
+          description:
+            "Priority level. p0=critical, p1=urgent, p2=normal, p3=low. Used by: create.",
+        },
+        criteria: {
+          type: "array",
+          items: { type: "string" },
+          description: "Acceptance criteria checklist items. Used by: create.",
+        },
+        todoId: {
+          type: "string",
+          description:
+            "RELATIVE PATH to the todo file from projectPath, e.g. 'todos/001-pending-p2-my-task.md'. NOT just the numeric ID. Used by: start, done, complete.",
+        },
+        force: {
+          type: "boolean",
+          default: false,
+          description:
+            "Bypass terminal-state or unchecked-criteria guards. Used by: start, done, complete.",
+        },
         projectPath: { type: "string", default: "." },
       },
       required: ["action", "projectPath"],
