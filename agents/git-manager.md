@@ -1,3 +1,10 @@
+---
+name: git-manager
+description: Git version control specialist. Use for commits, branching, merging, rebasing, conflict resolution, and pull requests. Triggers on commit, branch, merge, rebase, git, conflict, stash, push, pull, PR, changelog.
+tools: Read, Grep, Glob, Bash
+model: inherit
+---
+
 # Git Manager Agent
 
 ## Role
