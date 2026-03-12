@@ -16,11 +16,11 @@ Claude Code's plugin system (discovered by inspecting `~/.claude/plugins/`) supp
 
 We use the **single-plugin repo** model. It is simpler and appropriate for super-kit's cohesive scope.
 
-When a user adds `github:USERNAME/super-kit` as a marketplace source, they install via:
+When a user adds `github:dgkngk/super-kit` as a marketplace source, they install via:
 ```
-/plugin install super-kit@USERNAME
+/plugin install super-kit@dgkngk
 ```
-The `@USERNAME` is the marketplace identifier (GitHub username/org), not the repo name. This matches the observed pattern: `claude-mem@thedotmack` comes from `thedotmack/claude-mem`.
+The `@dgkngk` is the marketplace identifier (GitHub username), not the repo name. This matches the observed pattern: `claude-mem@thedotmack` comes from `thedotmack/claude-mem`.
 
 ## Architecture
 
@@ -51,7 +51,7 @@ super-kit/
   "author": {
     "name": "Super-Kit"
   },
-  "repository": "https://github.com/YOUR_USERNAME/super-kit",
+  "repository": "https://github.com/dgkngk/super-kit",
   "license": "MIT"
 }
 ```
@@ -212,8 +212,8 @@ Add a "Claude Code Plugin" section near the top of README.md:
 ## Install as Claude Code Plugin
 
 1. Open Claude Code → `/plugin` → **Discover** → **Add source**
-2. Enter: `github:YOUR_USERNAME/super-kit`
-3. Install: `/plugin install super-kit@YOUR_USERNAME`
+2. Enter: `github:dgkngk/super-kit`
+3. Install: `/plugin install super-kit@dgkngk`
 
 This configures the MCP server automatically and makes all skills, agents, and commands available.
 
