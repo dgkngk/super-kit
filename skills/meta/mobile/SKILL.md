@@ -1,3 +1,8 @@
+---
+name: mobile
+description: React Native, Flutter, and mobile development best practices. Use when building mobile apps, handling platform-specific behavior, or optimizing mobile performance.
+---
+
 # Mobile Development Skill
 
 ## Overview

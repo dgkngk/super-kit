@@ -1,3 +1,8 @@
+---
+name: api-design
+description: RESTful API patterns, GraphQL design, and API best practices. Use when designing APIs, choosing between REST/GraphQL/tRPC, structuring endpoints, versioning, or documenting APIs.
+---
+
 # API Design Skill
 
 ## Overview

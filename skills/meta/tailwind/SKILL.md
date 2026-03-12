@@ -1,3 +1,8 @@
+---
+name: tailwind
+description: Tailwind CSS v4 patterns, design systems, and responsive design. Use when styling with Tailwind, building design tokens, creating responsive layouts, or implementing dark mode.
+---
+
 # Tailwind CSS Skill
 
 ## Overview

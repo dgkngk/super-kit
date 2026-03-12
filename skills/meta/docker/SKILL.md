@@ -1,3 +1,8 @@
+---
+name: docker
+description: Container optimization, multi-stage builds, Docker Compose, and Docker best practices. Use when writing Dockerfiles, setting up containers, or optimizing image size.
+---
+
 # Docker Skill
 
 ## Overview

@@ -1,3 +1,8 @@
+---
+name: security
+description: Security audit, vulnerability scanning, and secure coding practices. Use when reviewing code for OWASP vulnerabilities, implementing auth, securing APIs, or handling sensitive data.
+---
+
 # Security Skill
 
 ## Overview

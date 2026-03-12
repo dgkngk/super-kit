@@ -1,3 +1,8 @@
+---
+name: react-patterns
+description: Modern React patterns, hooks, and state management principles. Use when structuring React components, managing state, optimizing re-renders, or choosing state management libraries.
+---
+
 # React Patterns Skill
 
 ## Overview

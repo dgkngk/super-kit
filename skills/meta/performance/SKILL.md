@@ -1,3 +1,8 @@
+---
+name: performance
+description: Performance profiling, optimization techniques, and caching strategies. Use when diagnosing slow applications, improving Core Web Vitals, or optimizing database queries and bundle size.
+---
+
 # Performance Optimization Skill
 
 ## Overview

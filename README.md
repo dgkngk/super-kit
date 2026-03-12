@@ -8,6 +8,16 @@ While the primary purpose is to compund the knowledge of engineering, I will add
 
 🔗 **NPM Package:** [superkit-mcp-server](https://www.npmjs.com/package/superkit-mcp-server)
 
+## Install as Claude Code Plugin
+
+1. Open Claude Code → `/plugin` → **Discover** → **Add source**
+2. Enter: `github:dgkngk/super-kit`
+3. Install: `/plugin install super-kit@dgkngk`
+
+This configures the MCP server automatically and makes all skills, agents, and commands available.
+
+**Requirements:** Node.js 18+ (for `npx superkit-mcp-server@latest`)
+
 ## Directory Structure
 - `agents/`: Contains instructions and guidelines for specialized AI roles (e.g., `data-engineer`).
 - `skills/`: Contains technology-specific or meta skills (patterns, best practices) the agent can load dynamically (e.g., `react-best-practices`).

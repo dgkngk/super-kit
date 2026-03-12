@@ -1,3 +1,8 @@
+---
+name: nextjs
+description: Next.js App Router architecture, Server Components, and modern patterns. Use when building Next.js apps, choosing rendering strategies, or optimizing data fetching.
+---
+
 # Next.js Best Practices Skill
 
 ## Overview
