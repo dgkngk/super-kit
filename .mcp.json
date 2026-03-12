@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "superkit": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "superkit-mcp-server@latest"]
+    }
+  }
+}

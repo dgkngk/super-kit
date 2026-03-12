@@ -1,0 +1,18 @@
+{
+  "name": "dgkngk",
+  "owner": {
+    "name": "Doğukan Gök"
+  },
+  "metadata": {
+    "description": "Super-Kit: Super Engineer Team for Claude Code",
+    "homepage": "https://github.com/dgkngk/super-kit"
+  },
+  "plugins": [
+    {
+      "name": "super-kit",
+      "version": "1.3.0",
+      "source": "./",
+      "description": "Super Engineer Team — 19 AI agents, 69 skills, slash commands, and an MCP server with semantic context search for Claude Code"
+    }
+  ]
+}
