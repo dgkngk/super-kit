@@ -11,6 +11,7 @@ import {
   Prompt,
 } from "@modelcontextprotocol/sdk/types.js";
 import * as path from "path";
+import * as os from "os";
 import * as fs from "fs/promises";
 import * as toml from "@iarna/toml";
 import { fileURLToPath } from "url";
@@ -64,9 +65,20 @@ import {
   load_project_skill_file,
   load_project_workflow_file,
 } from "./tools/ProjectAssets.js";
+import { ContextManager } from "./tools/contextManager.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const superKitRoot = path.resolve(__dirname, "../");
+
+const contextManager = new ContextManager({
+  assetsDir: superKitRoot,
+  storeDir: path.join(os.homedir(), ".superkit"),
+});
+
+// Index in background — does not block server startup
+contextManager.indexAll().catch((err) => {
+  console.error("[superkit] Context indexing failed:", err);
+});
 
 const server = new Server(
   {
@@ -486,6 +498,56 @@ const TOOLS: Tool[] = [
         },
       },
       required: ["workflowName"],
+    },
+  },
+  {
+    name: "search_context",
+    description:
+      "Semantic search over super-kit agents, skills, workflows, and SUPERKIT.md. Returns the most relevant heading-level chunks. Use BEFORE load_superkit_skill/agent/workflow to find what you need without loading full files.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "Natural language search query" },
+        topK: { type: "number", default: 5, description: "Number of results to return (1-20)" },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "index_context",
+    description:
+      "Manually trigger re-indexing of all super-kit context (agents, skills, workflows). Useful after adding new files. Returns indexing stats.",
+    inputSchema: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
+  },
+  {
+    name: "store_session_memory",
+    description:
+      "Persist a cross-session memory to super-kit's vector store. Memories are retrieved by semantic similarity in future sessions via recall_memory.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        text: { type: "string", description: "The memory to store (a fact, decision, or pattern)" },
+        tags: { type: "array", items: { type: "string" }, description: "Optional tags for filtering" },
+        ttl_days: { type: "number", enum: [30, 90], default: 30, description: "How long to keep this memory (30 or 90 days)" },
+      },
+      required: ["text"],
+    },
+  },
+  {
+    name: "recall_memory",
+    description:
+      "Search cross-session memories by semantic similarity. Returns memories stored via store_session_memory, ordered by relevance.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "What to search for in past memories" },
+        topK: { type: "number", default: 5, description: "Number of memories to return" },
+      },
+      required: ["query"],
     },
   },
 ];
@@ -1016,6 +1078,62 @@ server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
         args.projectPath,
       );
       return { content: [{ type: "text", text: content }] };
+    }
+
+    if (request.params.name === "search_context") {
+      const args = request.params.arguments as any;
+      const topK = Math.min(Math.max(1, args.topK ?? 5), 20);
+      const results = await contextManager.searchContext(args.query, topK);
+      const formatted = results
+        .map(
+          (r, i) =>
+            `[${i + 1}] ${r.sourceFile} › ${r.headingPath} (score: ${r.score.toFixed(3)})\n${r.content}`,
+        )
+        .join("\n\n---\n\n");
+      return { content: [{ type: "text", text: formatted || "No results found." }] };
+    }
+
+    if (request.params.name === "index_context") {
+      const stats = await contextManager.indexAll();
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Context indexed. Files re-embedded: ${stats.indexed}, unchanged: ${stats.skipped}.`,
+          },
+        ],
+      };
+    }
+
+    if (request.params.name === "store_session_memory") {
+      const args = request.params.arguments as any;
+      const ttl = args.ttl_days ?? 30;
+      await contextManager.storeMemory(args.text, args.tags ?? [], ttl);
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Memory stored (TTL: ${ttl} days). It will be retrievable via recall_memory.`,
+          },
+        ],
+      };
+    }
+
+    if (request.params.name === "recall_memory") {
+      const args = request.params.arguments as any;
+      const topK = Math.min(Math.max(1, args.topK ?? 5), 20);
+      const results = await contextManager.recallMemory(args.query, topK);
+      if (results.length === 0) {
+        return { content: [{ type: "text", text: "No memories found." }] };
+      }
+      const formatted = results
+        .map((r, i) => {
+          const expires = new Date(r.expiresAt).toISOString().slice(0, 10);
+          const tags = r.tags.length ? ` [${r.tags.join(", ")}]` : "";
+          return `[${i + 1}]${tags} (score: ${r.score.toFixed(3)}, expires: ${expires})\n${r.text}`;
+        })
+        .join("\n\n");
+      return { content: [{ type: "text", text: formatted }] };
     }
 
     throw new Error(`Unknown tool: ${request.params.name}`);
