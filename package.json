@@ -15,6 +15,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@huggingface/transformers": "^3.8.1",
     "@iarna/toml": "^2.2.5",
     "@modelcontextprotocol/sdk": "^1.4.1",
     "playwright": "^1.58.2",
