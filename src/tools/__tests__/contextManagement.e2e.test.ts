@@ -76,9 +76,12 @@ class McpClient {
 
 let client: McpClient;
 
-beforeAll(() => {
+beforeAll(async () => {
   client = new McpClient();
-});
+  // Trigger indexing once and wait for completion before all tests run.
+  // The model may need to be downloaded (~22MB) on first run.
+  await client.tool('index_context');
+}, 180_000);
 
 afterAll(() => {
   client.destroy();
@@ -104,13 +107,14 @@ describe('RAG tools registration', () => {
 
 describe('index_context', () => {
   it('indexes assets and returns stats', async () => {
+    // beforeAll already ran index_context once; this second call should be incremental
     const text = await client.tool('index_context');
     expect(text).toMatch(/context indexed/i);
     expect(text).toMatch(/files re-embedded:/i);
     expect(text).toMatch(/unchanged:/i);
-  }, 60_000); // first run may download ~22MB model
+  }, 30_000);
 
-  it('second run is fully incremental (0 re-embedded)', async () => {
+  it('second call is fully incremental (0 re-embedded)', async () => {
     const text = await client.tool('index_context');
     expect(text).toMatch(/files re-embedded: 0/i);
   }, 30_000);

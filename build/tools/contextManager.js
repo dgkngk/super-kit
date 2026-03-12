@@ -124,7 +124,7 @@ export class ContextManager {
     async storeMemory(text, tags, ttlDays) {
         if (!VALID_TTLS.has(ttlDays))
             throw new Error('TTL must be 30 or 90 days');
-        const id = createHash('sha1').update(`${Date.now()}::${text}`).digest('hex').slice(0, 16);
+        const id = createHash('sha1').update(text).digest('hex').slice(0, 16);
         const vec = await embedOne(text);
         const now = Date.now();
         await this.store.upsertMemory({

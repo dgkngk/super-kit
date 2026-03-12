@@ -69,6 +69,16 @@ describe('ContextManager', () => {
     expect(results[0].text).toBe('Always use container queries for responsive CSS');
   });
 
+  it('storeMemory deduplicates identical text (content-hash ID)', async () => {
+    await manager.indexAll();
+    const text = 'Use container queries for responsive CSS layouts';
+    await manager.storeMemory(text, ['css'], 30);
+    await manager.storeMemory(text, ['css'], 30); // same text again
+    const results = await manager.recallMemory('responsive CSS', 10);
+    const matching = results.filter(r => r.text === text);
+    expect(matching).toHaveLength(1); // stored once, not twice
+  });
+
   it('respects TTL options (30 or 90 days only)', async () => {
     await manager.indexAll();
     await expect(manager.storeMemory('test', [], 30)).resolves.not.toThrow();
