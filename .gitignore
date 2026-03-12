@@ -24,6 +24,9 @@ npm-debug.log*
 .env
 .env.local
 
+# Worktrees
+.worktrees/
+
 # Local folders (not needed)
 gemini-kit-old/
 gemini-cli-source/
