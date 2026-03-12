@@ -1,0 +1,153 @@
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { createHash } from 'crypto';
+import { chunkMarkdown } from './markdownChunker.js';
+import { embed, embedOne } from './embedder.js';
+import { ContextVectorStore } from './contextVectorStore.js';
+const VALID_TTLS = new Set([30, 90]);
+export class ContextManager {
+    opts;
+    store;
+    ready = false;
+    constructor(opts) {
+        this.opts = opts;
+        this.store = new ContextVectorStore(opts.storeDir);
+    }
+    isReady() {
+        return this.ready;
+    }
+    /** Scan agents/, skills/, and SUPERKIT.md; return all markdown entries with mtimes. */
+    async discoverFiles() {
+        const entries = [];
+        const base = this.opts.assetsDir;
+        const walk = async (dir, sourceType) => {
+            let items;
+            try {
+                items = await fs.readdir(dir);
+            }
+            catch {
+                return;
+            }
+            for (const item of items) {
+                const abs = path.join(dir, item);
+                const stat = await fs.stat(abs).catch(() => null);
+                if (!stat)
+                    continue;
+                if (stat.isDirectory()) {
+                    await walk(abs, sourceType);
+                }
+                else if (item.endsWith('.md')) {
+                    entries.push({
+                        relativePath: path.relative(base, abs).replace(/\\/g, '/'),
+                        absolutePath: abs,
+                        sourceType,
+                        mtime: stat.mtimeMs,
+                    });
+                }
+            }
+        };
+        await walk(path.join(base, 'agents'), 'agent');
+        await walk(path.join(base, 'skills', 'tech'), 'skill');
+        await walk(path.join(base, 'skills', 'meta'), 'skill');
+        await walk(path.join(base, 'skills', 'workflows'), 'workflow');
+        // SUPERKIT.md itself
+        const superkitPath = path.join(base, 'SUPERKIT.md');
+        const superkitStat = await fs.stat(superkitPath).catch(() => null);
+        if (superkitStat) {
+            entries.push({ relativePath: 'SUPERKIT.md', absolutePath: superkitPath, sourceType: 'system', mtime: superkitStat.mtimeMs });
+        }
+        return entries;
+    }
+    /** Re-embed and store the given file entries. */
+    async indexFiles(files) {
+        if (files.length === 0)
+            return;
+        const allChunks = [];
+        const allTexts = [];
+        const chunkMeta = [];
+        for (const file of files) {
+            const content = await fs.readFile(file.absolutePath, 'utf-8').catch(() => '');
+            if (!content.trim())
+                continue;
+            const chunks = chunkMarkdown(content, file.relativePath, file.sourceType);
+            for (const chunk of chunks) {
+                chunkMeta.push({ chunk, mtime: file.mtime });
+                // Embed heading path + content for better semantic matching
+                allTexts.push(`${chunk.headingPath}\n\n${chunk.content}`);
+            }
+        }
+        if (allTexts.length === 0)
+            return;
+        const vectors = await embed(allTexts);
+        for (let i = 0; i < chunkMeta.length; i++) {
+            allChunks.push({ chunk: chunkMeta[i].chunk, vector: vectors[i], sourceMtime: chunkMeta[i].mtime });
+        }
+        const fileNames = files.map(f => f.relativePath);
+        await this.store.replaceChunksForFiles(fileNames, allChunks);
+    }
+    /**
+     * Index all markdown assets. Incremental: only re-indexes files whose mtime changed.
+     * Safe to call multiple times.
+     */
+    async indexAll() {
+        const discovered = await this.discoverFiles();
+        const mtimeMap = {};
+        for (const f of discovered)
+            mtimeMap[f.relativePath] = f.mtime;
+        const staleRelPaths = await this.store.getStaleFiles(mtimeMap);
+        const staleSet = new Set(staleRelPaths);
+        const toIndex = discovered.filter(f => staleSet.has(f.relativePath));
+        await this.indexFiles(toIndex);
+        this.ready = true;
+        return { indexed: toIndex.length, skipped: discovered.length - toIndex.length };
+    }
+    async searchContext(query, topK = 5) {
+        if (!this.ready) {
+            return [{
+                    sourceFile: 'system',
+                    sourceType: 'system',
+                    headingPath: 'Status',
+                    content: 'Context indexing is in progress. Try again in a few seconds.',
+                    score: 0,
+                }];
+        }
+        const vec = await embedOne(query);
+        const hits = await this.store.searchChunks(vec, topK);
+        return hits.map(h => ({
+            sourceFile: h.chunk.sourceFile,
+            sourceType: h.chunk.sourceType,
+            headingPath: h.chunk.headingPath,
+            content: h.chunk.content,
+            score: h.score,
+        }));
+    }
+    async storeMemory(text, tags, ttlDays) {
+        if (!VALID_TTLS.has(ttlDays))
+            throw new Error('TTL must be 30 or 90 days');
+        const id = createHash('sha1').update(`${Date.now()}::${text}`).digest('hex').slice(0, 16);
+        const vec = await embedOne(text);
+        const now = Date.now();
+        await this.store.upsertMemory({
+            id,
+            text,
+            tags,
+            vector: vec,
+            createdAt: now,
+            expiresAt: now + ttlDays * 24 * 60 * 60 * 1000,
+        });
+    }
+    async recallMemory(query, topK = 5) {
+        const vec = await embedOne(query);
+        const hits = await this.store.searchMemory(vec, topK);
+        return hits.map(h => ({
+            text: h.entry.text,
+            tags: h.entry.tags,
+            score: h.score,
+            createdAt: h.entry.createdAt,
+            expiresAt: h.entry.expiresAt,
+        }));
+    }
+    async pruneMemories() {
+        return this.store.pruneExpiredMemories();
+    }
+}
