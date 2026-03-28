@@ -1,71 +1,17 @@
-description = "Interactive project setup wizard - create context files for new projects"
+description = "Workspace onboarding — scan project, read docs, Q&A gaps, write .agents/context/ files"
 
-prompt = """
-# 🚀 Kit Setup Wizard
+prompt = '''
+Read and follow the /kit-setup workflow exactly as defined in:
+  skills/workflows/kit-setup.md
 
-Hello! This is the wizard to setup project context for Super-Kit.
+That file contains the complete 7-phase onboarding process:
+  Phase 1 — File Tree Scan
+  Phase 2 — Structured Reading
+  Phase 3 — Initial Context Draft
+  Phase 4 — Iterative Q&A
+  Phase 5 — Write Context Files
+  Phase 6 — Optional Pointer Injection
+  Phase 7 — Handoff
 
-## I will help you create 3 context files:
-
-1. **product.md** - Product description, users, goals
-2. **tech-stack.md** - Language, framework, database
-3. **guidelines.md** - Code style, commit conventions
-
----
-
-## Step 1: Product Context
-
-Please tell me about your project:
-
-**Questions:**
-1. What are you building? (One-line description)
-2. Who are the primary users? (Developers, End users, Enterprises, etc.)
-3. What is the main goal of the product?
-4. What are the main features?
-
----
-
-When you finish answering, I will:
-1. Create file `docs/agents/product.md`
-2. Continue asking about Tech Stack
-3. Continue asking about Guidelines
-4. Ask about Claude Code agent installation (optional)
-5. Complete setup!
-
-**You can answer freely or following the format:**
-```
-Product: [description]
-Users: [who uses it]
-Goals: [goals]
-Features: [main features]
-```
-
----
-
-## Step 4: Claude Code Agent Installation (Optional)
-
-After completing Steps 1-3, ask the user:
-
-> "Are you using **Claude Code** as your AI assistant? If so, I can install the Super-Kit agents directly into your `.claude/agents/` folder so they appear in the `/agents` dialog — giving you one-click access to the Planner, Coder, Scout, Reviewer, Tester, and all other Super-Kit specialists."
-
-If the user says **yes**, ask:
-
-> "Where would you like to install them?
-> - **a) Global** — `~/.claude/agents/` (available in every project)
-> - **b) Project-local** — `.claude/agents/` in the current directory (this project only)"
-
-If the user chooses **global (a)**:
-- Use the `list_superkit_assets` MCP tool to get all agent names
-- For each agent, use the `load_superkit_agent` MCP tool to get its content
-- Write each agent file to `~/.claude/agents/{agent-name}.md`
-- The files already contain the required YAML frontmatter — copy them as-is
-
-If the user chooses **project-local (b)**:
-- Same process, but write to `.claude/agents/{agent-name}.md` relative to the current working directory
-- Create the `.claude/agents/` directory if it doesn't exist
-
-After writing all files, confirm:
-> "✅ Super-Kit agents installed! Open the `/agents` dialog in Claude Code to see them."
-
-If the user says **no** or skips, complete setup without this step.
-"""
+Begin with Phase 1, Step 1.1.
+'''
