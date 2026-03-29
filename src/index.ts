@@ -66,6 +66,7 @@ import {
   load_project_workflow_file,
 } from "./tools/ProjectAssets.js";
 import { ContextManager } from "./tools/contextManager.js";
+import { KitSetupOrchestrator } from "./tools/kitSetupOrchestrator.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const superKitRoot = path.resolve(__dirname, "../");
@@ -535,6 +536,31 @@ const TOOLS: Tool[] = [
         ttl_days: { type: "number", enum: [30, 90], default: 30, description: "How long to keep this memory (30 or 90 days)" },
       },
       required: ["text"],
+    },
+  },
+  {
+    name: "kit_setup",
+    description:
+      "Workspace onboarding tool. Scans the project, reads documentation and agent context files, writes structured context to .agents/context/. Use action 'start' to scan and draft, 'resume' to write context files, 'status' to check staleness.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        action: {
+          type: "string",
+          enum: ["start", "resume", "status"],
+          description: "'start' runs Phases 1–3 (scan + read + draft). 'resume' runs Phase 5 (write context files). 'status' checks whether context is stale.",
+        },
+        projectPath: {
+          type: "string",
+          default: ".",
+          description: "Absolute or relative path to the project root. Defaults to process.cwd().",
+        },
+        startResult: {
+          type: "object",
+          description: "Required for action 'resume'. The object returned by a previous 'start' call.",
+        },
+      },
+      required: ["action"],
     },
   },
   {
@@ -1134,6 +1160,34 @@ server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
         })
         .join("\n\n");
       return { content: [{ type: "text", text: formatted }] };
+    }
+
+    if (request.params.name === "kit_setup") {
+      const args = request.params.arguments as any;
+      const projectPath = path.resolve(args.projectPath ?? process.cwd());
+      const orchestrator = new KitSetupOrchestrator(projectPath);
+
+      if (args.action === "start") {
+        const result = await orchestrator.start();
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+
+      if (args.action === "resume") {
+        if (!args.startResult) throw new Error("resume requires startResult from a previous start call");
+        const result = await orchestrator.resume({ phase: 5, startResult: args.startResult });
+        // Re-index so new project context is immediately searchable
+        contextManager.indexAll().catch((err) => {
+          console.error("[superkit] Post-kit-setup indexing failed:", err);
+        });
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+
+      if (args.action === "status") {
+        const result = await orchestrator.status();
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+
+      throw new Error(`Unknown kit_setup action: ${args.action}`);
     }
 
     throw new Error(`Unknown tool: ${request.params.name}`);

@@ -19,6 +19,7 @@ export interface StructureMap {
 export interface ReadingLogEntry {
   file: string;
   status: 'read' | 'not_found' | 'skipped';
+  source_type: 'doc' | 'agent_context' | 'manifest' | 'source_readme';
   key_facts: string[];
 }
 
@@ -278,10 +279,11 @@ async function buildReadingLog(projectPath: string, structureMap: StructureMap):
       log.push({
         file: filename,
         status: 'read',
+        source_type: 'doc',
         key_facts: extractKeyFacts(content, filename),
       });
     } catch {
-      log.push({ file: filename, status: 'not_found', key_facts: [] });
+      log.push({ file: filename, status: 'not_found', source_type: 'doc', key_facts: [] });
     }
   }
 
@@ -293,6 +295,7 @@ async function buildReadingLog(projectPath: string, structureMap: StructureMap):
       log.push({
         file: `${docDir}/index.md`,
         status: 'read',
+        source_type: 'doc',
         key_facts: extractKeyFacts(content, 'index.md'),
       });
     } catch {
@@ -308,10 +311,11 @@ async function buildReadingLog(projectPath: string, structureMap: StructureMap):
       log.push({
         file: agentFile,
         status: 'read',
+        source_type: 'agent_context',
         key_facts: extractKeyFacts(content, agentFile),
       });
     } catch {
-      log.push({ file: agentFile, status: 'not_found', key_facts: [] });
+      log.push({ file: agentFile, status: 'not_found', source_type: 'agent_context', key_facts: [] });
     }
   }
 
@@ -323,6 +327,7 @@ async function buildReadingLog(projectPath: string, structureMap: StructureMap):
       log.push({
         file: manifest,
         status: 'read',
+        source_type: 'manifest',
         key_facts: extractKeyFacts(content, manifest),
       });
     } catch {
@@ -338,6 +343,7 @@ async function buildReadingLog(projectPath: string, structureMap: StructureMap):
       log.push({
         file: `${srcDir}/README.md`,
         status: 'read',
+        source_type: 'source_readme',
         key_facts: extractKeyFacts(content, 'README.md'),
       });
     } catch {
@@ -577,7 +583,7 @@ export class KitSetupOrchestrator {
     }
 
     // Phase 6: write integrations.json
-    await this._writeIntegrations(contextDir, startResult.structureMap);
+    await this._writeIntegrations(contextDir, startResult.structureMap, startResult.readingLog);
     filesWritten.push('.agents/context/integrations.json');
 
     // Phase 7: completion summary
@@ -592,14 +598,27 @@ export class KitSetupOrchestrator {
     return { summary, filesWritten };
   }
 
-  private async _writeIntegrations(contextDir: string, structureMap: StructureMap): Promise<void> {
+  private async _writeIntegrations(
+    contextDir: string,
+    structureMap: StructureMap,
+    readingLog: ReadingLogEntry[],
+  ): Promise<void> {
     const integrationsPath = path.join(contextDir, 'integrations.json');
-    const integrations: Record<string, { type: string; contextPointer: string }> = {};
+    const lastRead = new Date().toISOString();
+    const integrations: Record<string, {
+      agentFile: string;
+      lastRead: string;
+      extractedFacts: string[];
+      pointsTo: string;
+    }> = {};
 
     for (const agentFile of structureMap.agent_context) {
+      const logEntry = readingLog.find(e => e.file === agentFile && e.source_type === 'agent_context');
       integrations[agentFile] = {
-        type: 'agent_context',
-        contextPointer: '.agents/context/project.md',
+        agentFile,
+        lastRead,
+        extractedFacts: logEntry?.key_facts ?? [],
+        pointsTo: '.agents/context/project.md',
       };
     }
 
