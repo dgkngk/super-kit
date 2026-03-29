@@ -298,7 +298,7 @@ the `status` action returns staleness information:
   generatedDate: string,
   newFiles:      string[],   // files added since last run
   deletedFiles:  string[],   // files removed since last run
-  modifiedFiles: string[],   // files changed since last run
+  modifiedFiles: string[],   // (not implemented) files changed since last run
   staleModules:  string[],   // modules with file changes in their dirs
 }
 ```
