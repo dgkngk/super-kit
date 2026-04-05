@@ -12,7 +12,8 @@ The tool will:
 4. Return a draft context and question queue for Phase 4 Q&A
 
 After answering any clarification questions, call:
-  `kit_setup({ action: "resume", projectPath: "." })`
+  `kit_setup({ action: "resume", projectPath: ".", startResult })`
+where `startResult` is the object returned from the prior `start` call.
 
 To check whether context files are stale, call:
   `kit_setup({ action: "status", projectPath: "." })`

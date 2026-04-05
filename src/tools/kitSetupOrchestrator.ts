@@ -35,6 +35,7 @@ export interface StartResult {
   questionQueue: string[];
   needsClarification: boolean;
   legacyDetected?: LegacyDetected;
+  readAt: string;
 }
 
 export interface ResumeOptions {
@@ -505,6 +506,7 @@ export class KitSetupOrchestrator {
   async start(): Promise<StartResult> {
     const structureMap = await buildStructureMap(this.projectPath);
     const readingLog = await buildReadingLog(this.projectPath, structureMap);
+    const readAt = new Date().toISOString();
     const draftContext = buildDraftContext(structureMap, readingLog);
     const questionQueue = buildQuestionQueue(structureMap, readingLog);
     const needsClarification = questionQueue.length > 0;
@@ -513,6 +515,7 @@ export class KitSetupOrchestrator {
     return {
       structureMap,
       readingLog,
+      readAt,
       draftContext,
       questionQueue,
       needsClarification,
@@ -583,7 +586,7 @@ export class KitSetupOrchestrator {
     }
 
     // Phase 6: write integrations.json
-    await this._writeIntegrations(contextDir, startResult.structureMap, startResult.readingLog);
+    await this._writeIntegrations(contextDir, startResult.structureMap, startResult.readingLog, startResult.readAt);
     filesWritten.push('.agents/context/integrations.json');
 
     // Phase 7: completion summary
@@ -602,9 +605,10 @@ export class KitSetupOrchestrator {
     contextDir: string,
     structureMap: StructureMap,
     readingLog: ReadingLogEntry[],
+    readAt: string,
   ): Promise<void> {
     const integrationsPath = path.join(contextDir, 'integrations.json');
-    const lastRead = new Date().toISOString();
+    const lastRead = readAt;
     const integrations: Record<string, {
       agentFile: string;
       lastRead: string;

@@ -1175,9 +1175,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
       if (args.action === "resume") {
         if (!args.startResult) throw new Error("resume requires startResult from a previous start call");
         const result = await orchestrator.resume({ phase: 5, startResult: args.startResult });
-        // Re-index so new project context is immediately searchable
+        // Re-index super-kit assets and project context so both are immediately searchable
         contextManager.indexAll().catch((err) => {
-          console.error("[superkit] Post-kit-setup indexing failed:", err);
+          console.error("[superkit] Post-kit-setup asset indexing failed:", err);
+        });
+        contextManager.indexProjectContext(projectPath).catch((err) => {
+          console.error("[superkit] Post-kit-setup project context indexing failed:", err);
         });
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }

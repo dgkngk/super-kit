@@ -131,6 +131,50 @@ export class ContextManager {
     return { indexed: toIndex.length, skipped: discovered.length - toIndex.length };
   }
 
+  /**
+   * Index project context files from `{projectPath}/.agents/context/`.
+   * Incremental: only re-indexes files whose mtime changed.
+   */
+  async indexProjectContext(projectPath: string): Promise<{ indexed: number; skipped: number }> {
+    const contextDir = path.join(projectPath, '.agents', 'context');
+    const entries: FileEntry[] = [];
+
+    const walk = async (dir: string) => {
+      let items: string[];
+      try { items = await fs.readdir(dir); } catch { return; }
+      for (const item of items) {
+        const abs = path.join(dir, item);
+        const stat = await fs.stat(abs).catch(() => null);
+        if (!stat) continue;
+        if (stat.isDirectory()) {
+          await walk(abs);
+        } else if (item.endsWith('.md')) {
+          entries.push({
+            relativePath: path.relative(projectPath, abs).replace(/\\/g, '/'),
+            absolutePath: abs,
+            sourceType: 'project_context',
+            mtime: stat.mtimeMs,
+          });
+        }
+      }
+    };
+
+    await walk(contextDir);
+
+    if (entries.length === 0) return { indexed: 0, skipped: 0 };
+
+    const mtimeMap: Record<string, number> = {};
+    for (const f of entries) mtimeMap[f.relativePath] = f.mtime;
+
+    const staleRelPaths = await this.store.getStaleFiles(mtimeMap);
+    const staleSet = new Set(staleRelPaths);
+    const toIndex = entries.filter(f => staleSet.has(f.relativePath));
+
+    await this.indexFiles(toIndex);
+
+    return { indexed: toIndex.length, skipped: entries.length - toIndex.length };
+  }
+
   async searchContext(query: string, topK = 5): Promise<SearchResult[]> {
     if (!this.ready) {
       return [{

@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 
-export type SourceType = 'agent' | 'skill' | 'workflow' | 'system';
+export type SourceType = 'agent' | 'skill' | 'workflow' | 'system' | 'project_context';
 
 export interface MarkdownChunk {
   id: string;

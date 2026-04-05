@@ -29,9 +29,9 @@ writes context files that agents can query via `search_context`.
 ### Usage
 
 ```
-kit_setup({ action: "start",  projectPath: "." })   // Phase 1–3
-kit_setup({ action: "resume", projectPath: "." })   // Phase 5 (write files)
-kit_setup({ action: "status", projectPath: "." })   // Check staleness
+const startResult = await kit_setup({ action: "start", projectPath: "." })          // Phase 1–3
+await kit_setup({ action: "resume", projectPath: ".", startResult })                 // Phase 5 (write files)
+await kit_setup({ action: "status", projectPath: "." })                              // Check staleness
 ```
 
 ---
@@ -59,7 +59,7 @@ root-level entries without reading file contents.
 
 ```typescript
 {
-  root_files:   string[],  // README, ARCHITECTURE, etc.
+  root_files:   string[],  // top-level files not matching other categories (README, package.json, Makefile, tsconfig.json, etc.)
   doc_files:    string[],  // docs/, .agents/, wiki/ dirs
   agent_context: string[], // CLAUDE.md, .cursorrules, GEMINI.md, etc.
   config_files: string[],  // tsconfig.json, .eslintrc, Makefile, etc.
@@ -164,8 +164,11 @@ collecting answers to fill in gaps before calling `resume`. Typical questions:
 **Action:** `resume`
 
 `KitSetupOrchestrator.resume({ phase: 5, startResult })` writes all context
-files. After writing, the caller should trigger `contextManager.indexAll()` to
-make the new files immediately searchable via `search_context`.
+files. After writing, the caller triggers two indexing calls:
+- `contextManager.indexAll()` — refreshes super-kit assets (agents, skills, workflows, SUPERKIT.md)
+- `contextManager.indexProjectContext(projectPath)` — indexes project `.agents/context/` files
+
+Both are required for `search_context` to return results from the newly written project context.
 
 ### Files written
 

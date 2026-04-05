@@ -256,6 +256,66 @@ describe('KitSetupOrchestrator', () => {
       expect(result).toHaveProperty('filesWritten');
       expect(Array.isArray(result.filesWritten)).toBe(true);
     });
+
+    it('integrations.json has correct schema for each agent context file', async () => {
+      await fs.writeFile(path.join(tmpDir, 'CLAUDE.md'), '# Claude\nUse TypeScript.\nNo default exports.');
+
+      const orchestrator = new KitSetupOrchestrator(tmpDir);
+      const startResult = await orchestrator.start();
+      await orchestrator.resume({ phase: 5, startResult });
+
+      const integrationsPath = path.join(tmpDir, '.agents', 'context', 'integrations.json');
+      const raw = await fs.readFile(integrationsPath, 'utf8');
+      const integrations = JSON.parse(raw);
+
+      expect(integrations).toHaveProperty('CLAUDE.md');
+      const entry = integrations['CLAUDE.md'];
+      expect(entry).toHaveProperty('agentFile', 'CLAUDE.md');
+      expect(entry).toHaveProperty('lastRead');
+      expect(typeof entry.lastRead).toBe('string');
+      expect(entry).toHaveProperty('extractedFacts');
+      expect(Array.isArray(entry.extractedFacts)).toBe(true);
+      expect(entry).toHaveProperty('pointsTo', '.agents/context/project.md');
+    });
+
+    it('integrations.json extractedFacts matches reading log key_facts', async () => {
+      await fs.writeFile(path.join(tmpDir, 'CLAUDE.md'), '# Claude\nUse TypeScript.\nNo default exports.');
+
+      const orchestrator = new KitSetupOrchestrator(tmpDir);
+      const startResult = await orchestrator.start();
+
+      const logEntry = startResult.readingLog.find(
+        e => e.file === 'CLAUDE.md' && e.source_type === 'agent_context',
+      );
+      expect(logEntry).toBeDefined();
+
+      await orchestrator.resume({ phase: 5, startResult });
+
+      const raw = await fs.readFile(
+        path.join(tmpDir, '.agents', 'context', 'integrations.json'), 'utf8',
+      );
+      const integrations = JSON.parse(raw);
+      expect(integrations['CLAUDE.md'].extractedFacts).toEqual(logEntry!.key_facts);
+    });
+
+    it('integrations.json lastRead reflects start time, not resume time', async () => {
+      await fs.writeFile(path.join(tmpDir, 'CLAUDE.md'), '# Claude\nUse TypeScript.');
+
+      const orchestrator = new KitSetupOrchestrator(tmpDir);
+      const startResult = await orchestrator.start();
+      const readAt = startResult.readAt;
+
+      // Introduce a small delay to ensure resume time differs from start time
+      await new Promise(r => setTimeout(r, 5));
+
+      await orchestrator.resume({ phase: 5, startResult });
+
+      const raw = await fs.readFile(
+        path.join(tmpDir, '.agents', 'context', 'integrations.json'), 'utf8',
+      );
+      const integrations = JSON.parse(raw);
+      expect(integrations['CLAUDE.md'].lastRead).toBe(readAt);
+    });
   });
 
   // ─── status action ───────────────────────────────────────────────────────────
