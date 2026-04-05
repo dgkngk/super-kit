@@ -1,17 +1,22 @@
 description = "Workspace onboarding — scan project, read docs, Q&A gaps, write .agents/context/ files"
 
 prompt = '''
-Read and follow the /kit-setup workflow exactly as defined in:
-  skills/workflows/kit-setup.md
+Use the `kit_setup` MCP tool to onboard this workspace.
 
-That file contains the complete 7-phase onboarding process:
-  Phase 1 — File Tree Scan
-  Phase 2 — Structured Reading
-  Phase 3 — Initial Context Draft
-  Phase 4 — Iterative Q&A
-  Phase 5 — Write Context Files
-  Phase 6 — Optional Pointer Injection
-  Phase 7 — Handoff
+Call `kit_setup({ action: "start", projectPath: "." })` to begin.
 
-Begin with Phase 1, Step 1.1.
+The tool will:
+1. Scan the file tree and categorize all project files
+2. Read README, ARCHITECTURE, package manifests, and agent context files
+3. Detect any legacy context files (.docs/, docs/agents/) that need migration
+4. Return a draft context and question queue for Phase 4 Q&A
+
+After answering any clarification questions, call:
+  `kit_setup({ action: "resume", projectPath: ".", startResult })`
+where `startResult` is the object returned from the prior `start` call.
+
+To check whether context files are stale, call:
+  `kit_setup({ action: "status", projectPath: "." })`
+
+All context files are written to `.agents/context/` in the project root.
 '''

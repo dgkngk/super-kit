@@ -26,7 +26,7 @@ class McpClient {
   private nextId = 1;
 
   constructor() {
-    this.proc = spawn('node', [SERVER_PATH], { stdio: ['pipe', 'pipe', 'pipe'] });
+    this.proc = spawn(process.execPath, [SERVER_PATH], { stdio: ['pipe', 'pipe', 'pipe'] });
     this.proc.stdout.on('data', (chunk: Buffer) => {
       this.buffer += chunk.toString();
       const lines = this.buffer.split('\n');
